@@ -1,0 +1,2 @@
+# Preserve the exact bytes of prompts, answers, and experiment metadata.
+** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

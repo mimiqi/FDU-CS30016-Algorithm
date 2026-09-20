@@ -172,7 +172,7 @@
     canvas {
       display: block;
       width: 100%;
-      aspect-ratio: 900 / 520;
+      aspect-ratio: 900 / 450;
       border-radius: 8px;
       background: color-mix(in srgb, var(--panel), var(--bg) 45%);
     }
@@ -234,23 +234,38 @@
     @media (max-width: 720px) {
       main { width: min(100% - 18px, 680px); margin: 12px auto; }
       .toolbar { align-items: stretch; }
-      .toolbar label, .toolbar button { flex: 1 1 140px; }
+      .toolbar label { flex: 1 1 100%; }
+      .toolbar button { flex: 1 1 140px; }
       .strategy-note { flex-basis: 100%; }
       .battlefield-panel, .log-panel { flex-basis: 100%; }
     }
+    .unit-panel { margin-top: 14px; }
+    .unit-panel h2 { font-size: 17px; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+    th, td { padding: 8px; text-align: left; border-bottom: 1px solid var(--border); }
+    select { max-width: 100%; min-width: 0; }
+    .toolbar label { min-width: 0; }
+    #scenarioNote { margin: 14px 0 0; }
   </style>
 </head>
 <body>
   <main>
-    <h1>RTS 集火策略对局</h1>
+    <h1>RTS 集火算法审计</h1>
     <p class="subtitle">双方单位属性完全相同：生命 55、攻击 10、射程 6、移速 2、攻击间隔 2 tick。射程内存在敌人时单位停止移动；敌方始终就近攻击。</p>
 
     <section class="toolbar" aria-label="模拟控制">
+      <label>对局场景
+        <select id="scenarioSelect">
+          <option value="counterexample">同属性反例：攻击时机影响终局</option>
+          <option value="demo">基础演示：集火优于就近攻击</option>
+        </select>
+      </label>
       <label>
         己方策略
         <select id="strategySelect">
           <option value="default">默认算法：就近攻击</option>
-          <option value="model">大模型算法：优化集火</option>
+          <option value="model" selected>旧模型算法：最低生命值集火</option>
+          <option value="corrected">人工修正版：精确决策</option>
         </select>
       </label>
       <label>
@@ -267,8 +282,10 @@
       <div id="strategyNote" class="strategy-note"></div>
     </section>
 
+    <p id="scenarioNote" class="subtitle"></p>
+    <p id="criticalNote" class="result" hidden>即将处理 tick 3：旧模型选择 E1；精确策略选择 E2。观察 tick 8—9 的 F1。</p>
     <section class="metrics" aria-label="当前状态">
-      <div class="metric"><span>当前 tick</span><strong id="tickValue">0</strong></div>
+      <div class="metric"><span>已结算 tick</span><strong id="tickValue">0</strong></div>
       <div class="metric"><span>己方总生命值</span><strong id="friendlyHpValue">110</strong></div>
       <div class="metric"><span>敌方存活数</span><strong id="enemyAliveValue">2</strong></div>
       <div class="metric"><span>战斗状态</span><strong id="statusValue">移动中</strong></div>
@@ -282,7 +299,8 @@
           <span><i class="swatch enemy"></i>敌方单位</span>
           <span><i class="swatch goal"></i>共同目标点 G</span>
           <span>虚线圆：攻击范围</span>
-          <span>黄色连线：本 tick 攻击</span>
+          <span>黄色箭头：本 tick 攻击</span>
+          <span>小圆点为真实坐标，文字沿引线错开</span>
         </div>
         <div id="resultBox" class="result" aria-live="polite" hidden></div>
       </div>
@@ -292,418 +310,14 @@
         <ol id="eventLog" aria-live="polite"></ol>
       </aside>
     </section>
+    <section class="unit-panel" aria-label="单位状态">
+      <h2>下一 tick 开始状态</h2>
+      <table><thead><tr><th>单位</th><th>生命</th><th>位置</th><th>攻击状态</th></tr></thead><tbody id="unitRows"></tbody></table>
+    </section>
   </main>
 
-  <script>
-    (() => {
-      const WIDTH = 900;
-      const HEIGHT = 520;
-      const WORLD_SCALE = 30;
-      const GOAL = { x: 450, y: 260 };
-      const canvas = document.getElementById('battlefield');
-      const ctx = canvas.getContext('2d');
-      const strategySelect = document.getElementById('strategySelect');
-      const speedSelect = document.getElementById('speedSelect');
-      const playButton = document.getElementById('playButton');
-      const stepButton = document.getElementById('stepButton');
-      const resetButton = document.getElementById('resetButton');
-      const tickValue = document.getElementById('tickValue');
-      const friendlyHpValue = document.getElementById('friendlyHpValue');
-      const enemyAliveValue = document.getElementById('enemyAliveValue');
-      const statusValue = document.getElementById('statusValue');
-      const eventLog = document.getElementById('eventLog');
-      const resultBox = document.getElementById('resultBox');
-      const strategyNote = document.getElementById('strategyNote');
-
-      const strategyDescriptions = {
-        default: '每个己方单位独立攻击射程内距离最近的敌人；距离相同时选择编号最小的目标。',
-        model: '先确定统一的集火目标，再协调可攻击单位持续攻击它，尽早减少敌方存活数量。'
-      };
-
-      let state;
-      let playing = false;
-      let timer = null;
-
-      function css(name) {
-        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-      }
-
-      function createScenario() {
-        return {
-          tick: 0,
-          ended: false,
-          winner: null,
-          attacks: [],
-          units: [
-            unit('F1', 'friendly', 120, 210, 55, 10, 2, 6, 2),
-            unit('F2', 'friendly', 120, 310, 55, 10, 2, 6, 2),
-            unit('E1', 'enemy', 780, 210, 55, 10, 2, 6, 2),
-            unit('E2', 'enemy', 780, 310, 55, 10, 2, 6, 2)
-          ],
-          log: ['初始状态：双方尚未进入射程，所有单位均为 Ready。']
-        };
-      }
-
-      function unit(id, team, x, y, hp, attack, interval, range, speed) {
-        return {
-          id,
-          team,
-          x,
-          y,
-          hp,
-          maxHp: hp,
-          attack,
-          armor: 0,
-          interval,
-          cooldown: 0,
-          range,
-          speed,
-          alive: true
-        };
-      }
-
-      function alive(team) {
-        return state.units.filter(u => u.alive && (!team || u.team === team));
-      }
-
-      function distance(a, b) {
-        return Math.hypot(a.x - b.x, a.y - b.y);
-      }
-
-      function damage(attacker, target) {
-        return Math.max(0.5, attacker.attack - target.armor);
-      }
-
-      function candidatesFor(attacker) {
-        const otherTeam = attacker.team === 'friendly' ? 'enemy' : 'friendly';
-        return alive(otherTeam).filter(target => distance(attacker, target) <= attacker.range * WORLD_SCALE + 1e-9);
-      }
-
-      function defaultActions() {
-        const actions = [];
-        const ready = alive('friendly').filter(u => u.cooldown === 0);
-
-        for (const attacker of ready) {
-          const candidates = candidatesFor(attacker).sort((a, b) =>
-            distance(attacker, a) - distance(attacker, b) || a.id.localeCompare(b.id)
-          );
-          if (candidates.length) actions.push({ attacker, target: candidates[0] });
-        }
-        return actions;
-      }
-
-      function modelActions() {
-        const actions = [];
-        const virtualHp = new Map(alive('enemy').map(u => [u.id, u.hp]));
-        const ready = alive('friendly')
-          .filter(u => u.cooldown === 0)
-          .sort((a, b) => a.id.localeCompare(b.id));
-
-        for (const attacker of ready) {
-          const candidates = candidatesFor(attacker)
-            .filter(target => virtualHp.get(target.id) > 0)
-            .sort((a, b) =>
-              virtualHp.get(a.id) - virtualHp.get(b.id) ||
-              a.hp - b.hp ||
-              a.id.localeCompare(b.id)
-            );
-
-          if (candidates.length) {
-            const target = candidates[0];
-            actions.push({ attacker, target });
-            virtualHp.set(target.id, Math.max(0, virtualHp.get(target.id) - damage(attacker, target)));
-          }
-        }
-        return actions;
-      }
-
-      function enemyActions() {
-        const actions = [];
-        const ready = alive('enemy').filter(u => u.cooldown === 0);
-
-        for (const attacker of ready) {
-          const candidates = candidatesFor(attacker).sort((a, b) =>
-            distance(attacker, a) - distance(attacker, b) || a.id.localeCompare(b.id)
-          );
-          if (candidates.length) actions.push({ attacker, target: candidates[0] });
-        }
-        return actions;
-      }
-
-      function moveTowardGoal(unit) {
-        const dx = GOAL.x - unit.x;
-        const dy = GOAL.y - unit.y;
-        const d = Math.hypot(dx, dy);
-        if (d <= 1e-9) return;
-        const step = Math.min(unit.speed * WORLD_SCALE, d);
-        unit.x += dx / d * step;
-        unit.y += dy / d * step;
-      }
-
-      function step() {
-        if (state.ended) return;
-
-        const currentTick = state.tick;
-        const friendlyActions = strategySelect.value === 'default' ? defaultActions() : modelActions();
-        const hostileActions = enemyActions();
-        const actions = [...friendlyActions, ...hostileActions];
-        const attackedIds = new Set(actions.map(a => a.attacker.id));
-        const incoming = new Map();
-
-        for (const action of actions) {
-          incoming.set(action.target.id, (incoming.get(action.target.id) || 0) + damage(action.attacker, action.target));
-        }
-
-        state.attacks = actions.map(a => ({
-          from: { x: a.attacker.x, y: a.attacker.y },
-          to: { x: a.target.x, y: a.target.y },
-          label: `${a.attacker.id}→${a.target.id}`
-        }));
-
-        for (const target of state.units) {
-          if (target.alive && incoming.has(target.id)) {
-            target.hp -= incoming.get(target.id);
-          }
-        }
-
-        const deaths = [];
-        for (const unit of state.units) {
-          if (unit.alive && unit.hp <= 0) {
-            unit.hp = 0;
-            unit.alive = false;
-            deaths.push(unit.id);
-          }
-        }
-
-        const friendlyAlive = alive('friendly').length;
-        const enemyAlive = alive('enemy').length;
-        state.ended = friendlyAlive === 0 || enemyAlive === 0;
-        if (state.ended) {
-          state.winner = friendlyAlive > 0 ? 'friendly' : enemyAlive > 0 ? 'enemy' : 'draw';
-        }
-
-        for (const unit of state.units) {
-          if (!unit.alive) continue;
-          if (attackedIds.has(unit.id)) {
-            unit.cooldown = Math.max(0, unit.interval - 1);
-          } else {
-            unit.cooldown = Math.max(0, unit.cooldown - 1);
-            if (!state.ended && candidatesFor(unit).length === 0) moveTowardGoal(unit);
-          }
-        }
-
-        const actionText = actions.length
-          ? actions.map(a => `${a.attacker.id}→${a.target.id}(${damage(a.attacker, a.target)})`).join('，')
-          : '无攻击；射程内无敌人的单位向 G 移动，其余单位保持原位';
-        const deathText = deaths.length ? `；${deaths.join('、')} 死亡` : '';
-        state.log.push(`Tick ${currentTick}：${actionText}${deathText}`);
-        state.tick += 1;
-
-        if (state.ended) stop();
-        render();
-      }
-
-      function totalHp(team) {
-        return alive(team).reduce((sum, unit) => sum + unit.hp, 0);
-      }
-
-      function statusText() {
-        if (state.ended) {
-          if (state.winner === 'friendly') return '己方胜利';
-          if (state.winner === 'enemy') return '敌方胜利';
-          return '双方全灭';
-        }
-        return state.attacks.length ? '交战中' : '移动中';
-      }
-
-      function reset() {
-        stop();
-        state = createScenario();
-        resultBox.hidden = true;
-        render();
-      }
-
-      function play() {
-        if (state.ended) reset();
-        playing = true;
-        playButton.textContent = '暂停';
-        runLoop();
-      }
-
-      function stop() {
-        playing = false;
-        playButton.textContent = '播放';
-        if (timer) clearTimeout(timer);
-        timer = null;
-      }
-
-      function runLoop() {
-        if (!playing || state.ended) return;
-        step();
-        if (playing && !state.ended) {
-          timer = setTimeout(runLoop, Number(speedSelect.value));
-        }
-      }
-
-      function resizeCanvas() {
-        const dpr = Math.max(1, window.devicePixelRatio || 1);
-        canvas.width = Math.round(WIDTH * dpr);
-        canvas.height = Math.round(HEIGHT * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        render();
-      }
-
-      function drawGrid() {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        ctx.strokeStyle = css('--border');
-        ctx.globalAlpha = 0.45;
-        ctx.lineWidth = 1;
-        for (let x = 50; x < WIDTH; x += 50) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, HEIGHT);
-          ctx.stroke();
-        }
-        for (let y = 50; y < HEIGHT; y += 50) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(WIDTH, y);
-          ctx.stroke();
-        }
-        ctx.globalAlpha = 1;
-      }
-
-      function drawGoal() {
-        ctx.strokeStyle = css('--goal');
-        ctx.fillStyle = css('--goal');
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(GOAL.x, GOAL.y, 18, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(GOAL.x, GOAL.y, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.font = '600 14px Segoe UI, Microsoft YaHei, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('G', GOAL.x, GOAL.y - 27);
-      }
-
-      function drawRange(unit) {
-        ctx.strokeStyle = unit.team === 'friendly' ? css('--friendly') : css('--enemy');
-        ctx.globalAlpha = unit.cooldown === 0 ? 0.23 : 0.1;
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([6, 7]);
-        ctx.beginPath();
-        ctx.arc(unit.x, unit.y, unit.range * WORLD_SCALE, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.globalAlpha = 1;
-      }
-
-      function drawUnit(unit) {
-        const color = unit.team === 'friendly' ? css('--friendly') : css('--enemy');
-        const soft = unit.team === 'friendly' ? css('--friendly-soft') : css('--enemy-soft');
-
-        ctx.globalAlpha = unit.alive ? 1 : 0.2;
-        ctx.fillStyle = soft;
-        ctx.beginPath();
-        ctx.arc(unit.x, unit.y, 28, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(unit.x, unit.y, 20, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#fff';
-        ctx.font = '600 13px Segoe UI, Microsoft YaHei, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(unit.id, unit.x, unit.y);
-
-        const barX = unit.x - 30;
-        const barY = unit.y - 40;
-        ctx.fillStyle = css('--border');
-        ctx.fillRect(barX, barY, 60, 7);
-        ctx.fillStyle = unit.hp / unit.maxHp > 0.35 ? css('--success') : css('--enemy');
-        ctx.fillRect(barX, barY, 60 * Math.max(0, unit.hp / unit.maxHp), 7);
-
-        ctx.fillStyle = css('--text');
-        ctx.font = '12px Segoe UI, Microsoft YaHei, sans-serif';
-        ctx.fillText(`${unit.hp}/${unit.maxHp}`, unit.x, unit.y + 34);
-        ctx.fillStyle = css('--muted');
-        ctx.fillText(unit.cooldown === 0 ? 'Ready' : `CD ${unit.cooldown}`, unit.x, unit.y + 50);
-        ctx.globalAlpha = 1;
-      }
-
-      function drawAttacks() {
-        ctx.strokeStyle = css('--attack');
-        ctx.fillStyle = css('--attack');
-        ctx.lineWidth = 4;
-        ctx.font = '600 12px Segoe UI, Microsoft YaHei, sans-serif';
-        ctx.textAlign = 'center';
-        for (const attack of state.attacks) {
-          ctx.beginPath();
-          ctx.moveTo(attack.from.x, attack.from.y);
-          ctx.lineTo(attack.to.x, attack.to.y);
-          ctx.stroke();
-          const midX = (attack.from.x + attack.to.x) / 2;
-          const midY = (attack.from.y + attack.to.y) / 2;
-          ctx.fillText(attack.label, midX, midY - 8);
-        }
-      }
-
-      function renderLog() {
-        eventLog.replaceChildren();
-        state.log.forEach((entry, index) => {
-          const item = document.createElement('li');
-          item.textContent = entry;
-          if (index === state.log.length - 1) item.className = 'latest';
-          eventLog.appendChild(item);
-        });
-        eventLog.scrollTop = eventLog.scrollHeight;
-      }
-
-      function render() {
-        if (!state) return;
-        strategyNote.textContent = strategyDescriptions[strategySelect.value];
-        tickValue.textContent = state.tick;
-        friendlyHpValue.textContent = totalHp('friendly');
-        enemyAliveValue.textContent = alive('enemy').length;
-        statusValue.textContent = statusText();
-        stepButton.disabled = state.ended;
-
-        drawGrid();
-        drawGoal();
-        alive().forEach(drawRange);
-        state.units.forEach(drawUnit);
-        drawAttacks();
-        renderLog();
-
-        if (state.ended) {
-          const label = strategySelect.value === 'default' ? '默认就近攻击算法' : '大模型优化集火算法';
-          resultBox.textContent = `${label}结束于 tick ${state.tick - 1}，己方最终总生命值为 ${totalHp('friendly')}。切换策略并重置，可直接比较结果。`;
-          resultBox.hidden = false;
-        } else {
-          resultBox.hidden = true;
-        }
-      }
-
-      playButton.addEventListener('click', () => playing ? stop() : play());
-      stepButton.addEventListener('click', step);
-      resetButton.addEventListener('click', reset);
-      strategySelect.addEventListener('change', reset);
-      speedSelect.addEventListener('change', () => {
-        if (playing) {
-          clearTimeout(timer);
-          timer = setTimeout(runLoop, Number(speedSelect.value));
-        }
-      });
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
-      new ResizeObserver(resizeCanvas).observe(canvas);
-
-      reset();
-      resizeCanvas();
-    })();
-  </script>
+  <script src="rts-core.js"></script>
+  <script src="rts-scenarios.js"></script>
+  <script src="rts-view.js"></script>
 </body>
 </html>
