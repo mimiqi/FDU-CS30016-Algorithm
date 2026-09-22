@@ -1,0 +1,62 @@
+{
+  "pdf": "bhw1/大作业1_算法正确性与复杂度审计_正式审阅稿.pdf",
+  "pages": 9,
+  "bytes": 292838,
+  "visualReview": "All nine pages reviewed; changed pages reviewed again after final edits.",
+  "checks": [
+    {
+      "page": 1,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 2,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 3,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 4,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 5,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 6,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 7,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 8,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    },
+    {
+      "page": 9,
+      "textBoundsPass": true,
+      "glyphMarkersPass": true,
+      "pageNumberPass": true
+    }
+  ]
+}

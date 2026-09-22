@@ -1,0 +1,226 @@
+"""合并两项实验，生成正式审阅版 Markdown 与 PDF；不修改原始实验记录。"""
+import importlib.util
+from pathlib import Path
+import json
+from html import escape
+
+ROOT = Path(__file__).resolve().parents[2]
+spec = importlib.util.spec_from_file_location('layout', Path(__file__).with_name('build-task2-report.py'))
+L = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(L)
+p, h, eq, code, page = L.p, L.h, L.eq, L.code, L.page
+PDF = ROOT / 'bhw1/大作业1_算法正确性与复杂度审计_正式审阅稿.pdf'
+MD = ROOT / 'bhw1/大作业1_正式审阅稿.md'
+
+def table(headers, rows, widths, size=9.0):
+    style = L.ParagraphStyle('cell', parent=L.styles['body'], fontSize=size, leading=size+3,
+                             spaceAfter=0)
+    vals = [[L.Paragraph(L.safe_markup(str(c), 'Song'), style) for c in row] for row in [headers]+rows]
+    t = L.Table(vals, colWidths=widths, repeatRows=1)
+    t.setStyle(L.TableStyle([
+        ('BACKGROUND',(0,0),(-1,0),L.LIGHT),
+        ('LINEBELOW',(0,0),(-1,0),.7,L.ACCENT),
+        ('LINEBELOW',(0,-1),(-1,-1),.5,L.colors.HexColor('#bfc9d2')),
+        ('ROWBACKGROUNDS',(0,1),(-1,-1),[L.colors.white,L.colors.HexColor('#f7f9fa')]),
+        ('VALIGN',(0,0),(-1,-1),'TOP'),
+        ('TOPPADDING',(0,0),(-1,-1),5),('BOTTOMPADDING',(0,0),(-1,-1),5),
+        ('LEFTPADDING',(0,0),(-1,-1),6),('RIGHTPADDING',(0,0),(-1,-1),6),
+    ]))
+    L.story.extend([t,L.Spacer(1,9)])
+    lines=['| '+' | '.join(headers)+' |','|'+'|'.join(['---']*len(headers))+'|']
+    lines += ['| '+' | '.join(L.plain(str(c).replace('<br/>','；')) for c in row)+' |' for row in rows]
+    L.markdown.append('\n'.join(lines)+'\n')
+
+def build():
+    p('算法设计课程 · 大作业1', 'small')
+    L.story.append(L.Paragraph('挑战大模型', L.styles['title']))
+    L.markdown.append('# 挑战大模型：算法正确性与复杂度审计\n')
+    p('<b>算法正确性与复杂度审计</b>')
+    p('姓名：________________　学号：________________　日期：2026年9月21日', 'small')
+    h('摘要')
+    p('本文通过两个具体问题审计大模型的算法推理。任务一考察确定性RTS战斗中的集火策略：在双方单位初始属性完全相同的条件下，最低虚拟生命值优先的贪心策略使己方全灭，而另一条合法策略能保留5点生命值。反例揭示了局部伤害分配与跨时刻最优决策的区别，并以完整动作枚举和记忆化搜索给出修正。任务二考察按 n/log n 与剩余部分划分的递归算法。模型错误地给出 Θ(n log n/log log n)，本文定位其势函数差分错误，并证明正确复杂度为 Θ(n(log n)²/log log n)。两项审计均以数学论证为核心，以独立程序复核为辅助。')
+    p('<b>关键词：</b>贪心反例；状态空间搜索；不均匀递归；势函数；复杂度审计', 'small')
+    h('一、任务一：RTS集火算法的正确性审计')
+    h('1.1　问题定义',2)
+    p('输入为己方数量 n、敌方数量 m、共同目标点 G，以及双方初始坐标。每方1至3个单位，编号分别为 F1,…,Fn 和 E1,…,Em；所有输入坐标分量属于 [−30,30]，且为0.5的整数倍。单位是可重叠的点，沿当前位置到 G 的直线移动，不越过 G。没有障碍、碰撞、技能、随机伤害或治疗。')
+    table(['共同属性','取值','共同属性','取值'],[
+        ['初始生命值','55','攻击伤害 / 护甲','10 / 0'],
+        ['射程（含边界）','6','每tick最大移动距离','2'],
+        ['攻击间隔','2 tick','初始状态','全部Ready'],
+    ],[120,70,180,113])
+    p('己方Ready单位可攻击射程内任意存活敌人，也可等待；等待保留Ready。敌方Ready且有合法目标时必须攻击最近的己方单位，距离相同取编号最小者。第 t 个tick出手后，最早在 t+2 再次攻击。目标是最大化终局己方存活单位总生命值，并输出一条达到该值的合法决策序列。允许指数级精确算法。')
+    p('任务一模型信息为 gpt-5.6-luna、最低推理档位，由实验者确认；算法依据现有回答整理稿呈现，原始会话与对应关系的核对事项见文末。', 'small')
+
+    page()
+    h('1.2　战斗语义与被审计的贪心策略')
+    p('每个tick按如下顺序执行：①在tick开始状态上确定双方全部攻击；②累加伤害并同时扣血，再移除死亡单位，已经确定的攻击不因攻击者当场死亡而取消；③任一方全灭即结束，同时全灭的己方收益为0；④存活攻击者的下一tick冷却设为1，其他冷却减1且不低于0；⑤基于死亡移除后、任何移动前的统一位置快照，同时执行所有符合条件的移动。')
+    p('可移动单位须本tick未攻击、尚未到G，且射程内没有存活敌人，每次前进 min(2,到G距离)。射程内有敌人时，即使正在冷却或主动等待，也不得移动；移动后首次进入射程，只能从下一tick判断攻击。')
+    p('回答整理稿采用“最低虚拟生命值优先”。每个tick复制敌方生命值，按己方编号分配攻击；排序键依次为虚拟生命值、真实生命值、敌方编号。下面是统一属性下的等价伪代码：')
+    code('FocusFire(s):\n    virtualHP = copy(enemyHP); action = empty map\n    for f in aliveFriendlyById:\n        if not Ready(f): action[f] = wait; continue\n        C = alive enemies in range with virtualHP > 0\n        if C is empty: action[f] = wait; continue\n        e = argmin(C, (virtualHP[e], HP[e], id[e]))\n        action[f] = attack(e)\n        virtualHP[e] = max(0, virtualHP[e] - 10)\n    return action')
+    p('整理稿的最优性论证可概括为：优先集火低血量目标能更早完成击杀；敌人越少，未来伤害越低；重复此选择就能最大化己方终局生命值。虚拟生命值能减少当轮过量伤害，但这一局部性质尚不能推出全局最优。单次目标选择时间为 O(nm)，额外空间为 O(n+m)。')
+    h('1.3　反例输入与共同开局',2)
+    p('令 G=(0,0)，F1=(−10,0)、F2=(−7,0)、E1=(3,0)、E2=(4.5,0)。四个单位均采用前页共同属性。以下HP顺序固定为 (F1,F2,E1,E2)，死亡记0；位置均为该tick移动后的x坐标。')
+    table(['tick','全部攻击','结算后HP','移动后x坐标'],[
+        ['0','无','(55,55,55,55)','(−8,−5,1,2.5)'],
+        ['1','F2→E1；E1→F2','(55,45,45,55)','(−6,−5,1,0.5)'],
+        ['2','E2→F2','(55,35,45,55)','(−4,−5,1,0.5)'],
+    ],[35,138,150,160])
+    p('tick 3开始时，两名己方单位都可攻击E1、E2；E1为45血且Ready，E2为55血且在冷却。随后位置不变，E1在奇数tick攻击，E2在偶数tick攻击。')
+
+    page()
+    h('1.4　完整反例轨迹：相同首次击杀时间，不同终局')
+    p('旧贪心在tick 3优先攻击E1。对照策略则从tick 3起优先集火E2，击杀后再打E1。表中列出双方全部攻击和结算后HP；两条策略的tick 0—2均与前页一致。')
+    data=json.loads((ROOT/'bhw1/验证/RTS集火算法_验证结果.json').read_text(encoding='utf-8-sig'))
+    runs=data['cases']['counterexample']['runs']
+    old={r['tick']:r for r in runs['model']['trace']}
+    good={r['tick']:r for r in runs['corrected']['trace']}
+    def act(d,t):return '<br/>'.join(d[t]['attacks']) or '无'
+    def hp(d,t):return '('+','.join(str(d[t]['health'][k]) for k in ['F1','F2','E1','E2'])+')'
+    rows=[]
+    for t in range(3,17):
+        rows.append([str(t),act(old,t),hp(old,t),act(good,t) if t in good else '已结束',hp(good,t) if t in good else '(0,5,0,0)'])
+    table(['tick','旧贪心：全部攻击','旧贪心：HP','对照策略：全部攻击','对照策略：HP'],rows,[35,116,108,116,108],8.6)
+    p('<b>结果：</b>旧贪心在tick 16己方全灭，收益为0；对照策略在tick 15消灭全部敌人，F2剩余5血，收益为5。只要存在这一条收益更高的合法策略，就足以反驳旧贪心的全局最优性，无需依赖穷举求出真正最优值。')
+    p('两条策略都在tick 7完成首次击杀。关键差异是：击杀E1不能取消它在tick 7已经确定的攻击；击杀E2却能消除其tick 8攻击，使F1活到tick 9，多打出一次10点伤害。')
+
+    page()
+    h('1.5　错误定位与人工修正')
+    p('错误在于把“当前虚拟生命值最低”作为唯一目标，而没有证明该选择能延伸为整场战斗的最优方案。当前血量和第一次击杀时刻都不足以刻画未来收益；敌方的冷却相位、下一次攻击对象，以及被保护单位能否多攻击一次，都会改变结果。')
+    p('这一错误具有迷惑性：统一初始属性掩盖了不同接敌时间造成的冷却差异；虚拟生命值确实能减少部分过量伤害，容易被扩大解释为全局正确；“敌人越少，伤害越低”忽略了敌人何时出手、攻击谁。基础场景中的成功也不能代替贪心选择性质的证明。')
+    h('状态与动作',2)
+    p('保留战斗转移规则，改为枚举所有合法联合动作。固定初始输入和单位编号，对每个存活单位记录生命值 H、实际移动次数 q 和剩余冷却 r∈{0,1}，死亡单位用统一哨兵表示。编号不能随意交换，因为敌方距离并列时会读取编号。')
+    p('设初始位置为p₀，到G距离为d，L=⌈d/2⌉。若d&gt;0，第q次移动后位置由下式唯一确定；d=0时始终位于G。因此状态键可以使用整数而不依赖浮点坐标哈希。')
+    eq(r'p(q)=p_0+\min(1,2q/d)(G-p_0).','p(q) = p<sub>0</sub> + min(1, 2q/d)(G − p<sub>0</sub>).')
+    p('每个Ready单位可选择任意合法目标或wait，非Ready单位只有wait。枚举这些选项的笛卡尔积，包括可能造成过量伤害的攻击；攻击与等待会改变冷却和移动状态，不能仅按虚拟血量提前删去分支。旧贪心动作可用于搜索排序，但不用于剪枝。')
+    code('Solve(s):\n    if Terminal(s): return SumFriendlyHP(s)\n    k = Encode(s)\n    if k in memo: return memo[k]\n    best = -infinity; seen = empty set\n    for a in AllLegalJointActions(s):\n        next = SimulateOneTick(s, a)\n        nk = Encode(next)\n        if nk in seen: continue\n        add nk to seen\n        value = Solve(next)\n        if value > best:\n            best = value; choice[k] = a\n    memo[k] = best\n    return best')
+    p('求解前将memo、choice初始化为空表，且仅在同一初始输入内使用。SimulateOneTick严格执行第1.2节的战斗规则。由初始状态反复读取choice即可恢复最优序列。')
+
+    page()
+    h('1.6　终止性、最优性与复杂度')
+    p('<b>状态有限。</b>生命值只减不增，存活时仅有55、45、35、25、15、5六种值；冷却两种，移动次数0至L。含死亡哨兵在内，单位i最多有 1+12(Lᵢ+1) 种状态。')
+    p('<b>严格下降。</b>以死亡单位生命值为0，定义按字典序比较的非负整数三元组：')
+    eq(r'K=\sum_i\lceil H_i/10\rceil,\quad M=\sum_{i\;alive}(L_i-q_i),\quad C=\sum_{i\;alive}r_i.',
+       'K = Σ<sub>i</sub> ⌈H<sub>i</sub>/10⌉,　M = Σ<sub>i alive</sub>(L<sub>i</sub> − q<sub>i</sub>),　C = Σ<sub>i alive</sub> r<sub>i</sub>.')
+    p('有攻击时，至少一个结算前存活的目标受伤，K严格下降；无攻击但有移动时，K不变而M严格下降；两者都没有时，双方必有单位接敌，否则未到G的单位应移动，而全到G也必接敌。此时敌方未出手说明其正在冷却，因此C严格下降。故每个非终局转移都进入更小状态，递归必终止。')
+    p('<b>最优性。</b>状态包含决定后续行动与转移所需的全部信息。终局返回实际收益；对非终局，完整枚举所有联合动作，敌方行为确定，每个动作对应唯一后继。对上述良基顺序归纳：')
+    eq(r'V(s)=\max_{a\in A(s)}V(T(s,a)).','V(s) = max<sub>a∈A(s)</sub> V(T(s,a)).')
+    p('所有更小状态的最优值正确时，对全部后继取最大就得到当前状态的最优值。相同后继去重不改变可取得的结果集合。因此初始返回值为全局最优，choice恢复的序列合法且达到该值。')
+    p('<b>复杂度。</b>记N=n+m，可达状态数S，单状态最大联合动作数B，最大递归深度D。每次转移中的距离与范围检查为O(N²)。在单位代价几何运算和哈希表平均常数查询模型下：')
+    eq(r'B\le(m+1)^n,\qquad S\le\prod_{i=1}^N[1+12(L_i+1)].',
+       'B ≤ (m+1)<super>n</super>,　S ≤ ∏<sub>i=1…N</sub> [1+12(L<sub>i</sub>+1)].')
+    eq(r'\mathrm{Time}=O(SBN^2),\qquad\mathrm{Space}=O(SN+DBN).',
+       'Time = O(SBN<super>2</super>),　Space = O(SN + DBN).')
+    p('每条轨迹发生攻击的tick至多6N个，含移动的tick至多ΣLᵢ个；纯冷却等待每次至多一个，总数不超过6N，因此 D≤12N+ΣLᵢ。空间上界包括记忆表、递归栈及各层后继去重集合。算法允许指数规模搜索；达到程序状态预算时明确报错，不把截断结果当作最优值。')
+    table(['验证场景','就近攻击','旧贪心','精确修正版'],[
+        ['同属性反例','5','0','5'],['基础对称场景','0','25','25'],
+    ],[180,101,101,101])
+    p('反例记忆化搜索访问684个非终止状态，独立半整数坐标BFS访问737个状态，均确认最优值为5。两者状态表示与计数口径不同，状态数无需一致。', 'small')
+
+    task2()
+
+def task2():
+    page()
+    h('二、任务二：可变比例递归的复杂度审计')
+    h('2.1　算法与实验设置',2)
+    p('输入n为正整数。采用单位代价RAM模型，整数运算、比较、赋值、floor(log₂ n)和work()均记为常数时间。整数不溢出，递归不使用记忆化，各次调用实际执行。分析变量为数值n。')
+    code('procedure C(n):\n    if n <= 3:\n        work()\n        return\n    k = floor(log2(n))\n    r = floor(n / k)\n    C(r)\n    C(n - r)\n    for i = 1 to n:\n        work()')
+    p('n≥4时，2≤k≤n，因此1≤r≤n/2，两个子问题均严格缩小，递归必终止。非递归工作为Θ(n)，需要求解：')
+    eq(r'T(n)=T(r)+T(n-r)+\Theta(n),\quad r=\lfloor n/\lfloor\log_2n\rfloor\rfloor.',
+       'T(n) = T(r) + T(n − r) + Θ(n),　r = ⌊n/⌊log<sub>2</sub> n⌋⌋.')
+    p('2026年9月21日，以gpt-5.6-luna的low（轻度思考）设置开启无历史上下文的独立实验，要求给出紧确Θ界和推导。实际提示词包含A、B、C三题，没有提供正确答案；本报告选用出现错误的C题。完整提示词、后续进度消息和回答均已存档。')
+    h('2.2　模型分析与被反驳的结论',2)
+    p('模型正确建立了递推，随后选择F(n)=n log n/log log n作为候选，并令p=r/n=Θ(1/log n)。下面摘录其关键等式与结论，公式仅作排版转换：')
+    eq(r'F(n)-F(r)-F(n-r)=\Theta\!\left(\frac{n\log n}{\log\log n}\left[p\log\frac1p+(1-p)\log\frac1{1-p}\right]\right).',
+       'F(n) − F(r) − F(n − r)<br/>= Θ((n log n / log log n) [p log(1/p)+(1−p)log(1/(1−p))]).')
+    p('“由于 p log(1/p)=Θ(log log n/log n)，上式为 Θ(n)。因此通过上下界归纳，递推解满足”', 'quote')
+    eq(r'T(n)=\Theta(F(n))=\Theta\!\left(\frac{n\log n}{\log\log n}\right).',
+       'T(n) = Θ(F(n)) = Θ(n log n / log log n).')
+    p('原文还指出“取整和停止条件只影响低阶项，不改变该渐近界”。本报告反驳的是这一明确的紧确结论，以及支撑它的差分等式。')
+
+    page()
+    h('2.3　错误定位：势函数值与变化率混淆')
+    p('以下用自然对数分析同阶候选函数；保持原文2底对数也得到相同的差分阶。令x=ln n、p=r/n=Θ(1/x)，F(n)=n g(x)，g(x)=x/ln x。实际差分为：')
+    eq(r'\Delta_F=r[g(x)-g(\ln r)]+(n-r)[g(x)-g(\ln(n-r))].',
+       'Δ<sub>F</sub> = r[g(x)−g(ln r)] + (n−r)[g(x)−g(ln(n−r))].')
+    p('由于 ln r=x−Θ(ln x)、ln(n−r)=x−Θ(1/x)，当n充分大时，区间内u与x同阶。函数g的导数为：')
+    eq(r'g^{\prime}(u)=\frac{\ln u-1}{(\ln u)^2}=\Theta(1/\ln x).',
+       'g′(u) = (ln u − 1)/(ln u)<super>2</super> = Θ(1/ln x).')
+    p('定义加权对数下降量H(p)。其两项分别为Θ(ln x/x)和Θ(1/x)，故：')
+    eq(r'H(p)=p\ln(1/p)+(1-p)\ln(1/(1-p))=\Theta(\ln x/x).',
+       'H(p) = p ln(1/p)+(1−p)ln(1/(1−p)) = Θ(ln x/x).')
+    p('分别对两个差值应用中值定理，得到：')
+    eq(r'\Delta_F=\Theta\!\left(\frac{nH(p)}{\ln x}\right)=\Theta(n/\ln n).',
+       'Δ<sub>F</sub> = Θ(nH(p)/ln x) = Θ(n/ln n).')
+    p('<b>错误恰在模型的“利用熵差”一步。</b>它使用了Θ(n g(x)H(p))，实际应使用变化率g′，即Θ(n g′(x)H(p))。因此它把单次下降量多估了一个ln n因子。真实下降量不能抵偿每个节点的Θ(n)成本，“上下界归纳”的依据不成立。')
+    h('2.4　不依赖精确解的下界反驳',2)
+    p('递归树是满二叉树。各叶子规模在1到3之间，且规模之和为n，故叶子数L≥n/3。任意具有L个叶子的二叉树，深度小于log₂(L/2)的叶子至多L/2个，所以叶子深度之和为Ω(L log L)。')
+    p('每个内部节点的工作量等于其规模。把规模分摊到后代叶子，总内部work次数为Σ（叶子规模×叶子深度），至少为叶子深度之和。因此：')
+    eq(r'T(n)=\Omega(n\log n),\qquad n\log n/\log\log n=o(n\log n).',
+       'T(n) = Ω(n log n),　n log n / log log n = o(n log n).')
+    p('模型结论连这一普适下界都不满足，因而是实质性的复杂度错误，不只是证明过程略去细节。')
+
+    page()
+    h('2.5　正确紧确界的完整推导')
+    p('仍令x=ln n、p=r/n。由取整定义，p被两个正常数倍的1/x夹住。因此H(p)=Θ(ln x/x)。这里H只是确定性的加权表达，不假设递归含有随机选择。')
+    h('构造每次下降Θ(n)的势函数',2)
+    eq(r'G(x)=\frac{x^2}{\ln x},\qquad\Phi(n)=nG(\ln n)=\frac{n(\ln n)^2}{\ln\ln n}.',
+       'G(x) = x<super>2</super>/ln x,　Φ(n) = nG(ln n) = n(ln n)<super>2</super>/ln ln n.')
+    p('在区间[ln r,x]内，ln r=x−Θ(ln x)，故u=Θ(x)、ln u=Θ(ln x)。其导数一致满足：')
+    eq(r'G^{\prime}(u)=\frac{u(2\ln u-1)}{(\ln u)^2}=\Theta(x/\ln x).',
+       'G′(u) = u(2 ln u − 1)/(ln u)<super>2</super> = Θ(x/ln x).')
+    p('对两个非负差值分别使用中值定理，单节点势能差为：')
+    eq(r'\Delta_\Phi=\Phi(n)-\Phi(r)-\Phi(n-r)',
+       'Δ<sub>Φ</sub> = Φ(n) − Φ(r) − Φ(n−r)')
+    eq(r'=\Theta\!\left(\frac{x}{\ln x}\,[r\ln(n/r)+(n-r)\ln(n/(n-r))]\right)',
+       '= Θ((x/ln x) [r ln(n/r)+(n−r)ln(n/(n−r))])')
+    eq(r'=\Theta\!\left(\frac{x}{\ln x}\,nH(p)\right)=\Theta(n).',
+       '= Θ((x/ln x) nH(p)) = Θ(n).')
+    p('因此存在与n无关的正常数a、b及阈值N₀，使所有n≥N₀均满足 a n≤ΔΦ≤b n。这一统一界把势能变化与局部实际成本对应起来。')
+    h('沿整棵递归树求和',2)
+    p('在子问题规模小于固定阈值N₀时截断递归树，记内部节点集合为I，边界集合为B。对有限小规模任意正有界延拓Φ，必要时增大N₀。分裂保持规模总和，边界规模之和为n，个数至多n；边界势能与继续求解的总成本均为O(n)。中间项相消得到：')
+    eq(r'\sum_{v\in I}\Delta_\Phi(n_v)=\Phi(n)-\sum_{b\in B}\Phi(n_b)=\Phi(n)-O(n)=\Theta(\Phi(n)).',
+       'Σ<sub>v∈I</sub> Δ<sub>Φ</sub>(n<sub>v</sub>) = Φ(n) − Σ<sub>b∈B</sub> Φ(n<sub>b</sub>) = Φ(n) − O(n) = Θ(Φ(n)).')
+    p('最后一步使用Φ(n)/n趋于无穷。由a nᵥ≤ΔΦ(nᵥ)≤b nᵥ可知，内部节点规模之和为Θ(Φ(n))。加入O(n)的边界成本，得到：')
+    eq(r'\boxed{T(n)=\Theta\!\left(\frac{n(\log n)^2}{\log\log n}\right)}',
+       'T(n) = Θ(n(log n)<super>2</super>/log log n).')
+    p('证明对全部充分大的正整数成立。floor(log₂ n)=Θ(ln n)，floor(n/k)与n/k相差不足1，而n/k趋于无穷，故取整不改变上述比例和导数估计；常数基例只影响O(n)边界成本。不能因子问题规模之和为n就直接类比归并排序，也不能以最长路径乘n代替整树求和。')
+
+    page()
+    h('三、实验复核与综合结论')
+    p('任务二以W(n)统计work次数：n≤3时W(n)=1；否则W(n)=W(r)+W(n−r)+n。每个递归节点至少执行一次work，其他控制成本被其常数倍界定，故T(n)=Θ(W(n))。动态规划仅用于计算精确计数，不改变原算法无记忆化的定义。')
+    d=json.loads((ROOT/'bhw1/验证/任务二_C题_验证结果.json').read_text(encoding='utf-8-sig'))
+    rows=[]
+    for r in d['results']:
+        if r['n'] in (256,4096,65536,1048576):
+            rows.append([f"{r['n']:,}",f"{r['workCalls']:,}",f"{r['dividedByNLogSquaredNOverLogLogN']:.6f}"])
+    table(['n','精确work次数W(n)','W(n)/Q(n)'],rows,[135,195,153])
+    p('Q(n)=n(log₂ n)²/log₂(log₂ n)。直接执行n=1…512的全部work，与独立动态规划计数逐项相同。归一化结果与理论结论相容，但有限数值不替代渐近证明。', 'small')
+    p('任务一以合法反例否定贪心最优性，任务二以单次差分检查否定错误复杂度。两者共同说明：局部合理的规则或形式完整的证明，仍须检查其能否支撑全局结论。对任务一，应验证贪心选择是否保留最优解；对任务二，应验证候选势函数是否实际覆盖节点成本。')
+    h('附录　实验来源与复核材料',2)
+    p('<b>任务一来源。</b>模型为gpt-5.6-luna、最低推理档位（实验者于2026年9月21日确认）。主实验算法依据《RTS集火算法_大模型版.md》回答整理稿呈现，不标为逐字原文。旧实验日期、当时完整提示词、原回答位置，以及规则与最优性主张的逐项对应关系仍需核对。上述信息未用新实验记录替代。', 'small')
+    p('<b>任务二来源。</b>2026年9月21日的独立子代理实验，实际调用参数为gpt-5.6-luna、reasoning_effort=low、fork_turns=none；原始三题提示词和回答保存在 bhw1/实验原始记录/2026-09-21_03_任务二Luna轻度三题/。00为元数据，01和01b为输入，02为原回答，04为SHA-256校验值。本文第2.2节摘录C题关键论证，未将摘录冒充完整三题原文。', 'small')
+    p('<b>补充实验。</b>任务一另有gpt-5.6-terra完整搜索回答，345个场景审计未发现实质错误，其中344个场景与独立整数BFS一致。该实验不替代旧贪心主实验。任务二另一次未显式指定思考强度的实验曾给出正确答案，故本报告只陈述本次具体错误，不作稳定错误率判断。', 'small')
+    code('node bhw1/验证/rts-audit.cjs\nnode bhw1/验证/rts-independent-answer-audit.cjs\nnode bhw1/验证/task2-candidate-count.cjs\nnode bhw1/验证/task2-report-audit.cjs')
+    p('题干、回答整理稿、人工修正版及网页演示位于bhw1/；验证程序和结果位于bhw1/验证/。报告依据课程《大作业1 -- 挑战大模型——算法正确性与复杂度审计》要求编排。审阅时尚需补入姓名、学号，并完成任务一原始来源核对。', 'small')
+
+class ReportCanvas(L.NumberedCanvas):
+    def save(self):
+        count=len(self._saved)
+        for state in self._saved:
+            self.__dict__.update(state)
+            self.setStrokeColor(L.colors.HexColor('#c6ced5'));self.setLineWidth(.5)
+            self.line(56,43,L.A4[0]-56,43)
+            self.setFillColor(L.GRAY);self.setFont('Song',8)
+            self.drawString(56,29,'大作业1 | 算法正确性与复杂度审计')
+            self.setFont('Roman',9);self.drawRightString(L.A4[0]-56,29,f'{self._pageNumber} / {count}')
+            L.canvas.Canvas.showPage(self)
+        L.canvas.Canvas.save(self)
+
+if __name__=='__main__':
+    build()
+    MD.write_text('\n'.join(L.markdown),encoding='utf-8')
+    doc=L.SimpleDocTemplate(str(PDF),pagesize=L.A4,leftMargin=56,rightMargin=56,
+        topMargin=43,bottomMargin=57,title='挑战大模型：算法正确性与复杂度审计',
+        author='算法设计课程报告',subject='任务一与任务二合并正式审阅稿')
+    doc.build(L.story,canvasmaker=ReportCanvas)
+    print(PDF)

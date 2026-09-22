@@ -1,0 +1,22 @@
+[
+  {
+    "file": "00_实验元数据.json",
+    "algorithm": "SHA256",
+    "hash": "A63AFC77DEF8ADBA1E014861E74D6938D8BF91523FCBC215F578E40103CAABB5"
+  },
+  {
+    "file": "01_完整提示词.md",
+    "algorithm": "SHA256",
+    "hash": "E19EAFD635FB3EABB033C0B84102D43145A515E83247D80A6520A67B23BFE6EE"
+  },
+  {
+    "file": "01b_后续消息.md",
+    "algorithm": "SHA256",
+    "hash": "9E0BA02B534E0CF7D59609D05F98F0E3282A73537CB1C0BB9BFFE0558E79A851"
+  },
+  {
+    "file": "02_模型原始回答.md",
+    "algorithm": "SHA256",
+    "hash": "1A66E0E128FEBFEB6E396A2B1C5E93D47B82D6CADFE450D2275AD5A774D0791C"
+  }
+]

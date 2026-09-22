@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "rawRecordHashesVerified": 4,
+  "directRecursionCases": 512,
+  "testedRange": "1 <= n <= 512",
+  "note": "直接执行全部 work() 并与独立动态规划计数比较。渐近结论仍由报告中的数学证明给出。"
+}

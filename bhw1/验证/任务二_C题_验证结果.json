@@ -1,0 +1,60 @@
+{
+  "baseCase": "n <= 3: work() 一次并返回",
+  "note": "有限规模的精确操作计数，仅为理论推导的辅助检查，不是渐近证明。",
+  "results": [
+    {
+      "n": 16,
+      "workCalls": 57,
+      "dividedByNLogN": 0.890625,
+      "dividedByNLogSquaredNOverLogLogN": 0.4453125
+    },
+    {
+      "n": 64,
+      "workCalls": 411,
+      "dividedByNLogN": 1.0703125,
+      "dividedByNLogSquaredNOverLogLogN": 0.4611196127588521
+    },
+    {
+      "n": 256,
+      "workCalls": 2518,
+      "dividedByNLogN": 1.2294921875,
+      "dividedByNLogSquaredNOverLogLogN": 0.4610595703125
+    },
+    {
+      "n": 1024,
+      "workCalls": 14452,
+      "dividedByNLogN": 1.411328125,
+      "dividedByNLogSquaredNOverLogLogN": 0.4688330549542203
+    },
+    {
+      "n": 4096,
+      "workCalls": 77347,
+      "dividedByNLogN": 1.5736287434895833,
+      "dividedByNLogSquaredNOverLogLogN": 0.47011666962225895
+    },
+    {
+      "n": 16384,
+      "workCalls": 396519,
+      "dividedByNLogN": 1.7286856515066964,
+      "dividedByNLogSquaredNOverLogLogN": 0.4701228445681698
+    },
+    {
+      "n": 65536,
+      "workCalls": 1976168,
+      "dividedByNLogN": 1.8846206665039062,
+      "dividedByNLogSquaredNOverLogLogN": 0.47115516662597656
+    },
+    {
+      "n": 262144,
+      "workCalls": 9599831,
+      "dividedByNLogN": 2.034469392564562,
+      "dividedByNLogSquaredNOverLogLogN": 0.4713102658180066
+    },
+    {
+      "n": 1048576,
+      "workCalls": 45754263,
+      "dividedByNLogN": 2.181733274459839,
+      "dividedByNLogSquaredNOverLogLogN": 0.4714647167219289
+    }
+  ]
+}

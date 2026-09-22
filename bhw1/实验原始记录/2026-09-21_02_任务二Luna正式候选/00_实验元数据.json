@@ -1,0 +1,14 @@
+{
+  "date": "2026-09-21",
+  "timezone": "Asia/Shanghai",
+  "model_requested": "gpt-5.6-luna",
+  "mechanism": "collaboration.spawn_agent",
+  "task_name": "/root/luna_complexity_formal",
+  "fork_turns": "none",
+  "reasoning_effort_override": null,
+  "prompt_file": "01_完整提示词.md",
+  "answer_file": "02_模型原始回答.md",
+  "answer_capture": "逐字保存本会话收到的子代理 FINAL_ANSWER 文本；未导出底层原始消息 JSON",
+  "correct_answer_in_prompt": false,
+  "scope": "独立子代理实验，不是新建的用户可见任务；未测试 Astra"
+}

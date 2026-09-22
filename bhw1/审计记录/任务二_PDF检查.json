@@ -1,0 +1,40 @@
+{
+  "pdf": "bhw1/任务二报告_C题_复杂度审计.pdf",
+  "pages": 6,
+  "bytes": 249810,
+  "missingGlyphMarkers": 0,
+  "pageNumbersVerified": true,
+  "visualReview": "Final rendered PNGs reviewed for all six pages",
+  "pagesChecked": [
+    {
+      "page": 1,
+      "characters": 712,
+      "textBoundsPass": true
+    },
+    {
+      "page": 2,
+      "characters": 661,
+      "textBoundsPass": true
+    },
+    {
+      "page": 3,
+      "characters": 869,
+      "textBoundsPass": true
+    },
+    {
+      "page": 4,
+      "characters": 824,
+      "textBoundsPass": true
+    },
+    {
+      "page": 5,
+      "characters": 902,
+      "textBoundsPass": true
+    },
+    {
+      "page": 6,
+      "characters": 1073,
+      "textBoundsPass": true
+    }
+  ]
+}
