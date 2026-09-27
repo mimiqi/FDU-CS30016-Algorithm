@@ -1,0 +1,21 @@
+{
+  "source": "D:\\Text\\24_算法设计\\bhw1\\大作业1_正式审阅稿.md",
+  "sourceSha256": "75e14d88c5c41aab5a718474cdecd82f6ab0da9c9803ab7934826eab8304e88b",
+  "sourceUnchanged": true,
+  "pdf": "D:\\Text\\24_算法设计\\bhw1\\大作业1_算法正确性与复杂度审计_正式审阅稿.pdf",
+  "pdfSha256": "b108076bb7c32e4f5e6c9df609e88b17f813f10e5c0a2a566a456b35ce812878",
+  "pages": 9,
+  "blocks": {
+    "paragraphs": 54,
+    "headings": 19,
+    "mathBlocks": 20,
+    "codeBlocks": 3,
+    "tables": 5,
+    "pageBreaks": 8
+  },
+  "verifiedTextFragments": 242,
+  "contentCoveragePass": true,
+  "mathLayoutRule": "Exact LaTeX match to verified layout; whitespace differences ignored.",
+  "visualReview": "passed: all 9 pages inspected; no clipping, overlap, broken glyphs, or table/page-break issues",
+  "pageBoundsPass": true
+}
