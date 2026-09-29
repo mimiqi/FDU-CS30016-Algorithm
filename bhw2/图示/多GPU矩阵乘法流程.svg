@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="810" viewBox="0 0 1100 810">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#526679"/></marker></defs>
+<style>text{font-family:'Microsoft YaHei','SimHei',sans-serif;fill:#203349} .small{font-size:16px} .label{font-size:18px} .heading{font-size:21px;font-weight:600} .line{fill:none;stroke:#526679;stroke-width:1.7}</style>
+<rect width="1100" height="810" fill="white"/>
+<text x="40" y="35" class="heading">矩阵分块</text>
+<text x="40" y="67" class="label">X 按列分为 8 块（输入位于 GPU 1）</text>
+<text x="650" y="35" class="heading">W 按行分为 8 块</text>
+<text x="845" y="105" class="small">权重提前分配</text>
+<text x="845" y="134" class="small">每卡保留对应的 W 块</text>
+<text x="40" y="215" class="small">X：128 × 8192</text>
+<text x="650" y="215" class="small">W：8192 × 4096</text>
+<rect x="40" y="85" width="60" height="103" rx="0" fill="#e3eef9" stroke="#b8c5d1"/>
+<text x="70" y="142" font-size="18" text-anchor="middle">X1</text>
+<rect x="650" y="51" width="165" height="18" rx="0" fill="#e3eef9" stroke="#b8c5d1"/>
+<text x="732.5" y="65" font-size="13" text-anchor="middle">W1</text>
+<rect x="100" y="85" width="60" height="103" rx="0" fill="#e6f3ed" stroke="#b8c5d1"/>
+<text x="130" y="142" font-size="18" text-anchor="middle">X2</text>
+<rect x="650" y="69" width="165" height="18" rx="0" fill="#e6f3ed" stroke="#b8c5d1"/>
+<text x="732.5" y="83" font-size="13" text-anchor="middle">W2</text>
+<rect x="160" y="85" width="60" height="103" rx="0" fill="#fff1d9" stroke="#b8c5d1"/>
+<text x="190" y="142" font-size="18" text-anchor="middle">X3</text>
+<rect x="650" y="87" width="165" height="18" rx="0" fill="#fff1d9" stroke="#b8c5d1"/>
+<text x="732.5" y="101" font-size="13" text-anchor="middle">W3</text>
+<rect x="220" y="85" width="60" height="103" rx="0" fill="#eee8f7" stroke="#b8c5d1"/>
+<text x="250" y="142" font-size="18" text-anchor="middle">X4</text>
+<rect x="650" y="105" width="165" height="18" rx="0" fill="#eee8f7" stroke="#b8c5d1"/>
+<text x="732.5" y="119" font-size="13" text-anchor="middle">W4</text>
+<rect x="280" y="85" width="60" height="103" rx="0" fill="#f8e6e7" stroke="#b8c5d1"/>
+<text x="310" y="142" font-size="18" text-anchor="middle">X5</text>
+<rect x="650" y="123" width="165" height="18" rx="0" fill="#f8e6e7" stroke="#b8c5d1"/>
+<text x="732.5" y="137" font-size="13" text-anchor="middle">W5</text>
+<rect x="340" y="85" width="60" height="103" rx="0" fill="#e0f1f1" stroke="#b8c5d1"/>
+<text x="370" y="142" font-size="18" text-anchor="middle">X6</text>
+<rect x="650" y="141" width="165" height="18" rx="0" fill="#e0f1f1" stroke="#b8c5d1"/>
+<text x="732.5" y="155" font-size="13" text-anchor="middle">W6</text>
+<rect x="400" y="85" width="60" height="103" rx="0" fill="#eeeedd" stroke="#b8c5d1"/>
+<text x="430" y="142" font-size="18" text-anchor="middle">X7</text>
+<rect x="650" y="159" width="165" height="18" rx="0" fill="#eeeedd" stroke="#b8c5d1"/>
+<text x="732.5" y="173" font-size="13" text-anchor="middle">W7</text>
+<rect x="460" y="85" width="60" height="103" rx="0" fill="#e8ecf5" stroke="#b8c5d1"/>
+<text x="490" y="142" font-size="18" text-anchor="middle">X8</text>
+<rect x="650" y="177" width="165" height="18" rx="0" fill="#e8ecf5" stroke="#b8c5d1"/>
+<text x="732.5" y="191" font-size="13" text-anchor="middle">W8</text>
+<path d="M40,237 L1060,237" class="line"/>
+<text x="40" y="272" font-size="19" text-anchor="start">各卡的输入块与权重块</text>
+<text x="452" y="272" font-size="19" text-anchor="start">并行计算</text>
+<text x="613" y="272" font-size="19" text-anchor="start">部分结果</text>
+<rect x="40" y="292" width="375" height="37" rx="5" fill="#e3eef9" stroke="#b8c5d1"/>
+<text x="227.5" y="316" font-size="16" text-anchor="middle">X1 (128×1024) × W1 (1024×4096)</text>
+<path d="M417,310.5 L441,310.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="292" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="317" font-size="18" text-anchor="middle">GPU 1</text>
+<path d="M563,310.5 L596,310.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="292" width="185" height="37" rx="5" fill="#e3eef9" stroke="#b8c5d1"/>
+<text x="692.5" y="316" font-size="17" text-anchor="middle">P1：128×4096</text>
+<path d="M787,310.5 L823,310.5" class="line"/>
+<rect x="40" y="347" width="375" height="37" rx="5" fill="#e6f3ed" stroke="#b8c5d1"/>
+<text x="227.5" y="371" font-size="16" text-anchor="middle">X2 (128×1024) × W2 (1024×4096)</text>
+<path d="M417,365.5 L441,365.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="347" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="372" font-size="18" text-anchor="middle">GPU 2</text>
+<path d="M563,365.5 L596,365.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="347" width="185" height="37" rx="5" fill="#e6f3ed" stroke="#b8c5d1"/>
+<text x="692.5" y="371" font-size="17" text-anchor="middle">P2：128×4096</text>
+<path d="M787,365.5 L823,365.5" class="line"/>
+<rect x="40" y="402" width="375" height="37" rx="5" fill="#fff1d9" stroke="#b8c5d1"/>
+<text x="227.5" y="426" font-size="16" text-anchor="middle">X3 (128×1024) × W3 (1024×4096)</text>
+<path d="M417,420.5 L441,420.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="402" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="427" font-size="18" text-anchor="middle">GPU 3</text>
+<path d="M563,420.5 L596,420.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="402" width="185" height="37" rx="5" fill="#fff1d9" stroke="#b8c5d1"/>
+<text x="692.5" y="426" font-size="17" text-anchor="middle">P3：128×4096</text>
+<path d="M787,420.5 L823,420.5" class="line"/>
+<rect x="40" y="457" width="375" height="37" rx="5" fill="#eee8f7" stroke="#b8c5d1"/>
+<text x="227.5" y="481" font-size="16" text-anchor="middle">X4 (128×1024) × W4 (1024×4096)</text>
+<path d="M417,475.5 L441,475.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="457" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="482" font-size="18" text-anchor="middle">GPU 4</text>
+<path d="M563,475.5 L596,475.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="457" width="185" height="37" rx="5" fill="#eee8f7" stroke="#b8c5d1"/>
+<text x="692.5" y="481" font-size="17" text-anchor="middle">P4：128×4096</text>
+<path d="M787,475.5 L823,475.5" class="line"/>
+<rect x="40" y="512" width="375" height="37" rx="5" fill="#f8e6e7" stroke="#b8c5d1"/>
+<text x="227.5" y="536" font-size="16" text-anchor="middle">X5 (128×1024) × W5 (1024×4096)</text>
+<path d="M417,530.5 L441,530.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="512" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="537" font-size="18" text-anchor="middle">GPU 5</text>
+<path d="M563,530.5 L596,530.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="512" width="185" height="37" rx="5" fill="#f8e6e7" stroke="#b8c5d1"/>
+<text x="692.5" y="536" font-size="17" text-anchor="middle">P5：128×4096</text>
+<path d="M787,530.5 L823,530.5" class="line"/>
+<rect x="40" y="567" width="375" height="37" rx="5" fill="#e0f1f1" stroke="#b8c5d1"/>
+<text x="227.5" y="591" font-size="16" text-anchor="middle">X6 (128×1024) × W6 (1024×4096)</text>
+<path d="M417,585.5 L441,585.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="567" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="592" font-size="18" text-anchor="middle">GPU 6</text>
+<path d="M563,585.5 L596,585.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="567" width="185" height="37" rx="5" fill="#e0f1f1" stroke="#b8c5d1"/>
+<text x="692.5" y="591" font-size="17" text-anchor="middle">P6：128×4096</text>
+<path d="M787,585.5 L823,585.5" class="line"/>
+<rect x="40" y="622" width="375" height="37" rx="5" fill="#eeeedd" stroke="#b8c5d1"/>
+<text x="227.5" y="646" font-size="16" text-anchor="middle">X7 (128×1024) × W7 (1024×4096)</text>
+<path d="M417,640.5 L441,640.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="622" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="647" font-size="18" text-anchor="middle">GPU 7</text>
+<path d="M563,640.5 L596,640.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="622" width="185" height="37" rx="5" fill="#eeeedd" stroke="#b8c5d1"/>
+<text x="692.5" y="646" font-size="17" text-anchor="middle">P7：128×4096</text>
+<path d="M787,640.5 L823,640.5" class="line"/>
+<rect x="40" y="677" width="375" height="37" rx="5" fill="#e8ecf5" stroke="#b8c5d1"/>
+<text x="227.5" y="701" font-size="16" text-anchor="middle">X8 (128×1024) × W8 (1024×4096)</text>
+<path d="M417,695.5 L441,695.5" class="line" marker-end="url(#arrow)"/>
+<rect x="445" y="677" width="115" height="37" rx="5" fill="#f5f7fa" stroke="#b8c5d1"/>
+<text x="502.5" y="702" font-size="18" text-anchor="middle">GPU 8</text>
+<path d="M563,695.5 L596,695.5" class="line" marker-end="url(#arrow)"/>
+<rect x="600" y="677" width="185" height="37" rx="5" fill="#e8ecf5" stroke="#b8c5d1"/>
+<text x="692.5" y="701" font-size="17" text-anchor="middle">P8：128×4096</text>
+<path d="M787,695.5 L823,695.5" class="line"/>
+<path d="M823,310.5 L823,695.5" class="line"/>
+<path d="M823,504 L849,504" class="line" marker-end="url(#arrow)"/>
+<rect x="853" y="461" width="207" height="88" rx="7" fill="#eaf0f7" stroke="#6988a4"/>
+<text x="956.5" y="488" font-size="18" text-anchor="middle">GPU 1 逐元素求和</text>
+<text x="956.5" y="518" font-size="18" text-anchor="middle">Y = P1 + ⋯ + P8</text>
+<text x="956.5" y="402" font-size="16" text-anchor="middle">P1 留在本卡</text>
+<text x="956.5" y="429" font-size="16" text-anchor="middle">P2 至 P8 传回 GPU 1</text>
+<path d="M956.5,552 L956.5,586" class="line" marker-end="url(#arrow)"/>
+<rect x="853" y="591" width="207" height="69" rx="7" fill="#f5f7fa" stroke="#6988a4"/>
+<text x="956.5" y="618" font-size="19" text-anchor="middle">完整输出 Y</text>
+<text x="956.5" y="644" font-size="18" text-anchor="middle">128 × 4096</text>
+<text x="40" y="758" font-size="18" text-anchor="start">GPU 1 分发 X2 至 X8；各卡完成局部乘法后，汇总部分结果。</text>
+<text x="40" y="786" font-size="18" text-anchor="start">每个 Pi 对应相同的输出位置，覆盖不同的输入特征，因此合并时相加。</text>
+</svg>
