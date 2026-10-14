@@ -1,0 +1,54 @@
+{
+  "question": "Q20",
+  "kind": "gen",
+  "index": 7,
+  "style": "branches",
+  "requested_model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "context": "fresh-ephemeral",
+  "started_at": "2026-10-14T13:22:25.320295+00:00",
+  "elapsed_seconds": 10.796,
+  "command": [
+    "C:\\Users\\mimiqi\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-5.6-luna",
+    "--config",
+    "model_reasoning_effort=\"low\"",
+    "--config",
+    "web_search=\"disabled\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "multi_agent",
+    "--disable",
+    "apps",
+    "--json",
+    "-"
+  ],
+  "prompt_sha256": "75c6556c9c3ee3a9eaa068637c7969c74350736642728b592553d6f4a1dfba77",
+  "raw": "{\"answer\":\"[-5, 0, 8, 0, -10, -1, 7, -2, 10, -3, 10, 4, 8, -4]\\n\",\"reason\":\"continue跳过else但执行finally；除零进入except后仍执行finally；正常分支执行else和finally。\"}",
+  "raw_sha256": "62c2f663ee03ab1321309b36e7cc1bdc943e0f6d6c4bcd5bb687050d3cd9d313",
+  "answer": "[-5,0,8,0,-10,-1,7,-2,10,-3,10,4,8,-4]",
+  "returncode": 0,
+  "tool_events": [],
+  "completed_turns": 1,
+  "usage": [
+    {
+      "input_tokens": 12344,
+      "cached_input_tokens": 12032,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 214,
+      "reasoning_output_tokens": 133
+    }
+  ],
+  "thread_ids": [
+    "01a13a94-1419-7fd0-b09a-f655283ca54c"
+  ]
+}

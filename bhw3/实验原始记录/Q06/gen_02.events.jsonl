@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a87-5c4a-7a83-82c6-7a793d997969"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"17 5 12\\n29 6 2\",\"reason\":\"共享默认字典且偶数调用会修改前一项；惰性条件仅在n>1时调用f(n-2)。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12322,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":320,"reasoning_output_tokens":266}}

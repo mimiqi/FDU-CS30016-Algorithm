@@ -1,0 +1,54 @@
+{
+  "question": "Q14",
+  "kind": "gen",
+  "index": 6,
+  "style": "dependencies",
+  "requested_model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "context": "fresh-ephemeral",
+  "started_at": "2026-10-14T13:17:21.084528+00:00",
+  "elapsed_seconds": 12.235,
+  "command": [
+    "C:\\Users\\mimiqi\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-5.6-luna",
+    "--config",
+    "model_reasoning_effort=\"low\"",
+    "--config",
+    "web_search=\"disabled\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "multi_agent",
+    "--disable",
+    "apps",
+    "--json",
+    "-"
+  ],
+  "prompt_sha256": "32c20127e332597c44f925b2f466af0143088800f18ead6920b4c16417c04e15",
+  "raw": "{\"answer\":\"21 18\\n21\\n\",\"reason\":\"默认列表在递归和多次调用间共享；按追加顺序计算各次返回值，得到x=21、y=18，最后f(0)=21。\"}",
+  "raw_sha256": "06eab8596acaf70c1f7c78941551f7db23b97d6b2d6b7675129b4e4c92468cf6",
+  "answer": "2118\n21",
+  "returncode": 0,
+  "tool_events": [],
+  "completed_turns": 1,
+  "usage": [
+    {
+      "input_tokens": 12293,
+      "cached_input_tokens": 12032,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 408,
+      "reasoning_output_tokens": 351
+    }
+  ],
+  "thread_ids": [
+    "01a13a8f-6fa6-7ef0-9363-4245383dd936"
+  ]
+}

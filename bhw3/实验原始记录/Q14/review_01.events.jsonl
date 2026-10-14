@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8e-a77a-7ac2-bff9-7c986e876770"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21 18\\n21\",\"reason\":\"默认列表共享：f(5)递归返回7、11，最终x=21；随后f(2)中f(0)返回10，y=18；再次f(0)返回21。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12295,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":355,"reasoning_output_tokens":292}}

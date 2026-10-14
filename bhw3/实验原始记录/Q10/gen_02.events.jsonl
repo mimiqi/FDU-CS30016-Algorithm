@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8b-d17b-72d2-a8d7-4b2619b89ab3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"[1, 4, 7] [0, 4, 1, -1, 2, 9]\",\"reason\":\"依次暂停于3次yield；send(4)记录4，next默认记录-1，close触发finally记录9。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12300,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":160,"reasoning_output_tokens":92}}

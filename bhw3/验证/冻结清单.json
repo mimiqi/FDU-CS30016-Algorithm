@@ -1,0 +1,18 @@
+{
+  "frozen_at": "2026-10-14T13:02:36.228975+00:00",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "seed": 20261014,
+  "bank_sha256": "a0c13aad6ee229a2b2851814328234e39b860ab41e33992afc25ef56b1900abd",
+  "protocol_sha256": "81d1dbba5139914f056217877724f9fa4636c6960cde3e8f339412539f746271",
+  "programs": 20,
+  "draws_per_fixed_question": 10,
+  "method_stages": [
+    4,
+    7,
+    10
+  ],
+  "tie_rule": "first-review-then-first-generator",
+  "temperature": null,
+  "top_p": null
+}

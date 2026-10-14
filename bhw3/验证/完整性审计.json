@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "questions": 20,
+  "physical_model_calls": 235,
+  "tools_used_by_respondents": 0,
+  "format_failures": 0,
+  "hash_checked_files": 940,
+  "token_boundary_collisions": 0,
+  "controller_tests": "passed",
+  "gold_reexecution": "passed",
+  "usage": {
+    "input_tokens": 2894184,
+    "cached_input_tokens": 2519552,
+    "output_tokens": 80935,
+    "reasoning_output_tokens": 61505
+  },
+  "method_call_distribution": {
+    "4": 11,
+    "7": 3,
+    "10": 6
+  }
+}

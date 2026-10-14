@@ -1,0 +1,54 @@
+{
+  "question": "Q16",
+  "kind": "gen",
+  "index": 5,
+  "style": "branches",
+  "requested_model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "context": "fresh-ephemeral",
+  "started_at": "2026-10-14T13:18:54.799260+00:00",
+  "elapsed_seconds": 18.891,
+  "command": [
+    "C:\\Users\\mimiqi\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-5.6-luna",
+    "--config",
+    "model_reasoning_effort=\"low\"",
+    "--config",
+    "web_search=\"disabled\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "multi_agent",
+    "--disable",
+    "apps",
+    "--json",
+    "-"
+  ],
+  "prompt_sha256": "6cc0b921f5bd245b7b1c61d62816fca907de61debc58bdba34565300f9461041",
+  "raw": "{\"answer\":\"[5, 5, 5, 6] [7, 1, 2, 3]\\n\",\"reason\":\"生成器共享列表迭代器；插入导致重复读取1，删除末尾后末值为3，依次产生5、5、5、6。\"}",
+  "raw_sha256": "ad8e849a047f235b86c50e6b9d53d97d29b75b27089026edc8d0e44608326f43",
+  "answer": "[5,5,5,6][7,1,2,3]",
+  "returncode": 0,
+  "tool_events": [],
+  "completed_turns": 1,
+  "usage": [
+    {
+      "input_tokens": 12281,
+      "cached_input_tokens": 6912,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 396,
+      "reasoning_output_tokens": 322
+    }
+  ],
+  "thread_ids": [
+    "01a13a90-ddb7-7c01-9c57-62f584a92ea4"
+  ]
+}

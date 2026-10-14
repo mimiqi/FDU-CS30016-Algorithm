@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8b-a953-7413-8194-bda96b1ee0a8"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"[1, 4, 7] [0, 4, 1, -1, 2, 9]\",\"reason\":\"生成器依次暂停于三次yield；send(4)记录4，next记录-1，close触发finally追加9。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12298,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":169,"reasoning_output_tokens":100}}

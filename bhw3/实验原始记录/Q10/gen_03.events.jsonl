@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8b-fcd4-79e2-84bb-0ef69011ebb3"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"[1, 4, 7] [0, 4, 1, -1, 2, 9]\\n\",\"reason\":\"生成器按次恢复执行；yield暂停前先追加i，send(4)写入4，next未传值写入-1，close触发finally追加9。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12300,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":182,"reasoning_output_tokens":103}}

@@ -1,0 +1,54 @@
+{
+  "question": "Q06",
+  "kind": "gen",
+  "index": 5,
+  "style": "branches",
+  "requested_model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "context": "fresh-ephemeral",
+  "started_at": "2026-10-14T13:09:43.805631+00:00",
+  "elapsed_seconds": 21.359,
+  "command": [
+    "C:\\Users\\mimiqi\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-5.6-luna",
+    "--config",
+    "model_reasoning_effort=\"low\"",
+    "--config",
+    "web_search=\"disabled\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "multi_agent",
+    "--disable",
+    "apps",
+    "--json",
+    "-"
+  ],
+  "prompt_sha256": "ed73e87da08a997f4b8af934280cbea00c99caeffce75572d434de96e4f6fea2",
+  "raw": "{\"answer\":\"22 6 15\\n37 8 2\\n\",\"reason\":\"递归计算并注意偶数n会先将memo[n-1]加1，导致后续已缓存值被修改。\"}",
+  "raw_sha256": "dd3c37eec87a97d38e638be64ad855c43e807980183b1d56b7950012290fcbec",
+  "answer": "22615\n3782",
+  "returncode": 0,
+  "tool_events": [],
+  "completed_turns": 1,
+  "usage": [
+    {
+      "input_tokens": 12322,
+      "cached_input_tokens": 12032,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 260,
+      "reasoning_output_tokens": 207
+    }
+  ],
+  "thread_ids": [
+    "01a13a88-7577-7c40-abf9-789def1b1539"
+  ]
+}

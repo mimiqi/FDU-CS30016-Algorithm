@@ -1,0 +1,54 @@
+{
+  "question": "Q14",
+  "kind": "gen",
+  "index": 0,
+  "style": "segments",
+  "requested_model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "context": "fresh-ephemeral",
+  "started_at": "2026-10-14T13:15:50.967603+00:00",
+  "elapsed_seconds": 11.797,
+  "command": [
+    "C:\\Users\\mimiqi\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-5.6-luna",
+    "--config",
+    "model_reasoning_effort=\"low\"",
+    "--config",
+    "web_search=\"disabled\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "multi_agent",
+    "--disable",
+    "apps",
+    "--json",
+    "-"
+  ],
+  "prompt_sha256": "d0ab5f2fbf3301e5dd229ada01568d4c3428d6ca454ac4e522fc512fc376df8d",
+  "raw": "{\"answer\":\"21 18\\n21\",\"reason\":\"默认列表持续复用。f(5)递归返回7、11后得21；随后f(2)得18，最后f(0)得21。\"}",
+  "raw_sha256": "624f9ad8f18ef8dec66ea95215351024e2c9da0b8a6cccc11a4a063d4dd3ba23",
+  "answer": "2118\n21",
+  "returncode": 0,
+  "tool_events": [],
+  "completed_turns": 1,
+  "usage": [
+    {
+      "input_tokens": 12293,
+      "cached_input_tokens": 12032,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 429,
+      "reasoning_output_tokens": 375
+    }
+  ],
+  "thread_ids": [
+    "01a13a8e-0fa0-7032-9c61-ffd7d03f3183"
+  ]
+}

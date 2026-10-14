@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8e-7ac6-7b81-bd18-4a9e2947e843"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21 18\\n21\",\"reason\":\"默认列表在调用间共享；递归返回值依次为3、7、11，后续调用继续累积并按末三项求和。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12293,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":316,"reasoning_output_tokens":264}}

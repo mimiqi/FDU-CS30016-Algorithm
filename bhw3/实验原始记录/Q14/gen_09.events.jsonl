@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8f-e306-7cf3-9a12-ee0159945f45"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21 18\\n21\",\"reason\":\"默认参数列表持续复用；依次递归并按每次追加后的末三项求和，得到x=21、y=18，最后f(0)=21。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12293,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":376,"reasoning_output_tokens":319}}

@@ -1,0 +1,462 @@
+[
+  {
+    "id": "Q01",
+    "topic": "有限状态更新",
+    "program": "a = [2, 5, 1, 4, 3]\ns = 0\nfor t in range(8):\n    i = (2*t + s) % 5\n    j = (i + 2) % 5\n    a[i], a[j] = (a[j] + t) % 9, (a[i] + s) % 9\n    s = (s + a[(i+1) % 5] - a[j]) % 13\nprint(a, s)",
+    "gold": "[8, 3, 0, 2, 5] 10",
+    "styles": [
+      "branches",
+      "trace",
+      "dependencies",
+      "segments",
+      "trace",
+      "segments",
+      "dependencies",
+      "branches",
+      "trace",
+      "branches"
+    ],
+    "reviews": [
+      "recompute",
+      "pitfalls",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q02",
+    "topic": "循环与别名",
+    "program": "a = [[1], [2], [3]]\nb = a[:]\nfor i in range(6):\n    k = i % 3\n    if i % 2 == 0:\n        b[k] += [i]\n    else:\n        b[k] = b[k] + [i]\n    a[(k+1) % 3].append(len(b[k]))\nprint(a)\nprint(b)",
+    "gold": "[[1, 0, 3, 5], [2, 2, 4], [3, 3, 2, 4]]\n[[1, 0, 3, 3], [2, 2, 1, 4], [3, 3, 2, 4, 5]]",
+    "styles": [
+      "trace",
+      "branches",
+      "segments",
+      "dependencies",
+      "segments",
+      "branches",
+      "trace",
+      "dependencies",
+      "trace",
+      "segments"
+    ],
+    "reviews": [
+      "ledger",
+      "pitfalls",
+      "recompute"
+    ]
+  },
+  {
+    "id": "Q03",
+    "topic": "闭包与可变默认值",
+    "program": "def make():\n    out = []\n    box = [1]\n    for i in range(4):\n        def f(x=i, b=box):\n            b[0] += x + i\n            return b[0]\n        out.append(f)\n        if i % 2 == 0:\n            box = [box[0] + i]\n    return out\nfs = make()\nprint([fs[k]() for k in [2, 0, 3, 1, 2, 0]])\nprint([f() for f in fs])",
+    "gold": "[6, 4, 9, 10, 15, 7]\n[10, 19, 24, 15]",
+    "styles": [
+      "trace",
+      "branches",
+      "segments",
+      "dependencies",
+      "dependencies",
+      "branches",
+      "trace",
+      "segments",
+      "dependencies",
+      "branches"
+    ],
+    "reviews": [
+      "pitfalls",
+      "recompute",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q04",
+    "topic": "生成器与列表修改",
+    "program": "a = [1, 2, 3, 4, 5]\ng = (a.pop(0) + len(a) for _ in range(len(a)-1))\nr = [next(g)]\na.append(r[0] % 3)\nr.append(next(g))\na[:] = a[::-1]\nr.extend(g)\nprint(r, a)",
+    "gold": "[5, 6, 5, 7] [4, 3]",
+    "styles": [
+      "branches",
+      "dependencies",
+      "segments",
+      "trace",
+      "dependencies",
+      "segments",
+      "trace",
+      "branches",
+      "segments",
+      "dependencies"
+    ],
+    "reviews": [
+      "recompute",
+      "pitfalls",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q05",
+    "topic": "finally与返回引用",
+    "program": "log = []\ndef f(n):\n    try:\n        if n % 3 == 0:\n            return log[:]\n        if n % 3 == 1:\n            return log\n        return len(log)\n    finally:\n        log.append(n)\n        if n == 5:\n            return log[:]\nr = [f(n) for n in [1, 3, 2, 5, 4]]\nlog.append(9)\nprint(r)\nprint(log)",
+    "gold": "[[1, 3, 2, 5, 4, 9], [1], 2, [1, 3, 2, 5], [1, 3, 2, 5, 4, 9]]\n[1, 3, 2, 5, 4, 9]",
+    "styles": [
+      "branches",
+      "segments",
+      "trace",
+      "dependencies",
+      "branches",
+      "dependencies",
+      "trace",
+      "segments",
+      "dependencies",
+      "branches"
+    ],
+    "reviews": [
+      "recompute",
+      "pitfalls",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q06",
+    "topic": "递归与共享缓存",
+    "program": "def f(n, memo={0: 1}):\n    if n in memo:\n        return memo[n]\n    memo[n] = f(n-1) + (f(n-2) if n > 1 else 0)\n    if n % 2 == 0:\n        memo[n-1] += 1\n    return memo[n]\nprint(f(6), f(3), f(5))\nprint(f(7), f(4), f(1))",
+    "gold": "17 5 12\n29 6 2",
+    "styles": [
+      "branches",
+      "dependencies",
+      "segments",
+      "trace",
+      "dependencies",
+      "branches",
+      "segments",
+      "trace",
+      "segments",
+      "branches"
+    ],
+    "reviews": [
+      "ledger",
+      "pitfalls",
+      "recompute"
+    ]
+  },
+  {
+    "id": "Q07",
+    "topic": "列表迭代中删改",
+    "program": "a = [2, 1, 3, 2, 4, 1]\nr = []\nfor x in a:\n    r.append(x)\n    if x % 2 == 0:\n        a.remove(x)\n    elif len(a) < 7:\n        a.append(x+1)\nprint(r)\nprint(a)",
+    "gold": "[2, 3, 2, 1, 4]\n[1, 3, 1, 4, 2]",
+    "styles": [
+      "segments",
+      "dependencies",
+      "branches",
+      "trace",
+      "dependencies",
+      "branches",
+      "trace",
+      "segments",
+      "trace",
+      "dependencies"
+    ],
+    "reviews": [
+      "pitfalls",
+      "recompute",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q08",
+    "topic": "布尔短路与副作用",
+    "program": "a = [1, 2, 3]\ndef f(x):\n    a.append(x)\n    return x % 3\nr = []\nfor k in [3, 2, 6, 4, 1]:\n    r.append((f(k) and f(k+1)) or (len(a) % 4))\nprint(r)\nprint(a)",
+    "gold": "[0, 2, 3, 2, 2]\n[1, 2, 3, 3, 2, 3, 6, 4, 5, 1, 2]",
+    "styles": [
+      "branches",
+      "dependencies",
+      "trace",
+      "segments",
+      "branches",
+      "dependencies",
+      "trace",
+      "segments",
+      "trace",
+      "segments"
+    ],
+    "reviews": [
+      "pitfalls",
+      "ledger",
+      "recompute"
+    ]
+  },
+  {
+    "id": "Q09",
+    "topic": "切片赋值与原地修改",
+    "program": "a = [0, 1, 2, 3, 4, 5]\nb = a\nc = a[::2]\na[1::2] = c[::-1]\nc[:] = b[1:5]\nb += [len(c)]\na = a + [9]\nb[2:5] = c[:2]\nprint(a)\nprint(b, c)",
+    "gold": "[0, 4, 2, 2, 4, 0, 4, 9]\n[0, 4, 4, 2, 0, 4] [4, 2, 2, 4]",
+    "styles": [
+      "branches",
+      "dependencies",
+      "trace",
+      "segments",
+      "branches",
+      "dependencies",
+      "segments",
+      "trace",
+      "trace",
+      "segments"
+    ],
+    "reviews": [
+      "pitfalls",
+      "ledger",
+      "recompute"
+    ]
+  },
+  {
+    "id": "Q10",
+    "topic": "生成器暂停与finally",
+    "program": "log = []\ndef g():\n    try:\n        for i in range(3):\n            log.append(i)\n            x = yield i + len(log)\n            log.append(-1 if x is None else x)\n    finally:\n        log.append(9)\nh = g()\nr = [next(h), h.send(4), next(h)]\nh.close()\nprint(r, log)",
+    "gold": "[1, 4, 7] [0, 4, 1, -1, 2, 9]",
+    "styles": [
+      "trace",
+      "segments",
+      "dependencies",
+      "branches",
+      "branches",
+      "trace",
+      "segments",
+      "dependencies",
+      "branches",
+      "segments"
+    ],
+    "reviews": [
+      "ledger",
+      "recompute",
+      "pitfalls"
+    ]
+  },
+  {
+    "id": "Q11",
+    "topic": "嵌套循环与位运算",
+    "program": "s = 3\nr = []\nfor i in range(1, 5):\n    for j in range(i, -1, -1):\n        if (s + j) % 3 == 0:\n            s ^= (i << 1) + j\n            continue\n        s = (s*2 + j - i) % 19\n        if s % 5 == 0:\n            break\n    r.append(s)\nprint(r, s)",
+    "gold": "[4, 12, 10, 0] 0",
+    "styles": [
+      "segments",
+      "trace",
+      "branches",
+      "dependencies",
+      "trace",
+      "dependencies",
+      "segments",
+      "branches",
+      "trace",
+      "branches"
+    ],
+    "reviews": [
+      "recompute",
+      "ledger",
+      "pitfalls"
+    ]
+  },
+  {
+    "id": "Q12",
+    "topic": "递归与finally覆盖",
+    "program": "log = []\ndef f(n):\n    try:\n        if n < 2:\n            return n+1\n        return f(n-1) + f(n-2)\n    finally:\n        log.append(n)\n        if n == 2:\n            return len(log) % 5\nprint(f(5))\nprint(log)",
+    "gold": "12\n[1, 0, 2, 1, 3, 1, 0, 2, 4, 1, 0, 2, 1, 3, 5]",
+    "styles": [
+      "trace",
+      "dependencies",
+      "segments",
+      "branches",
+      "branches",
+      "trace",
+      "segments",
+      "dependencies",
+      "dependencies",
+      "trace"
+    ],
+    "reviews": [
+      "recompute",
+      "pitfalls",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q13",
+    "topic": "浅拷贝和对象图",
+    "program": "a = [[1, 2], [3]]\nb = a * 2\nc = [x[:] for x in a]\nb[0] += [4]\nb[1] = b[1] + [5]\na.reverse()\na[0].append(6)\nb[2][:1] = c[1]\nc[0] = b[3]\nprint(a)\nprint(b)\nprint(c)",
+    "gold": "[[3, 6], [3, 2, 4]]\n[[3, 2, 4], [3, 5], [3, 2, 4], [3, 6]]\n[[3, 6], [3]]",
+    "styles": [
+      "dependencies",
+      "segments",
+      "branches",
+      "trace",
+      "trace",
+      "branches",
+      "segments",
+      "dependencies",
+      "trace",
+      "branches"
+    ],
+    "reviews": [
+      "recompute",
+      "ledger",
+      "pitfalls"
+    ]
+  },
+  {
+    "id": "Q14",
+    "topic": "默认参数与递归",
+    "program": "def f(n, a=[]):\n    a.append(n)\n    if n > 1:\n        r = f(n-2)\n    else:\n        r = len(a)\n    a.append(r)\n    return sum(a[-3:])\nx = f(5)\ny = f(2)\nprint(x, y)\nprint(f(0))",
+    "gold": "21 18\n21",
+    "styles": [
+      "segments",
+      "trace",
+      "branches",
+      "dependencies",
+      "segments",
+      "trace",
+      "dependencies",
+      "branches",
+      "segments",
+      "dependencies"
+    ],
+    "reviews": [
+      "ledger",
+      "recompute",
+      "pitfalls"
+    ]
+  },
+  {
+    "id": "Q15",
+    "topic": "生成器表达式绑定",
+    "program": "a = [1, 2, 3]\ngs = []\nfor i in range(3):\n    gs.append((i*x + len(a) for x in a[:i+1]))\na.append(4)\nr = [next(g) for g in gs]\ni = 5\na.pop()\nprint(r)\nprint([list(g) for g in gs])",
+    "gold": "[6, 6, 6]\n[[], [13], [13, 18]]",
+    "styles": [
+      "segments",
+      "trace",
+      "branches",
+      "dependencies",
+      "branches",
+      "trace",
+      "segments",
+      "dependencies",
+      "branches",
+      "segments"
+    ],
+    "reviews": [
+      "recompute",
+      "ledger",
+      "pitfalls"
+    ]
+  },
+  {
+    "id": "Q16",
+    "topic": "插入与延迟求值",
+    "program": "a = [1, 2, 3, 4]\ng = (x + a[-1] for x in a)\nr = [next(g)]\na.insert(0, 7)\nr.append(next(g))\na.pop()\nr.extend(g)\nprint(r, a)",
+    "gold": "[5, 5, 5, 6] [7, 1, 2, 3]",
+    "styles": [
+      "segments",
+      "branches",
+      "dependencies",
+      "trace",
+      "segments",
+      "branches",
+      "trace",
+      "dependencies",
+      "dependencies",
+      "trace"
+    ],
+    "reviews": [
+      "pitfalls",
+      "ledger",
+      "recompute"
+    ]
+  },
+  {
+    "id": "Q17",
+    "topic": "短路与海象赋值",
+    "program": "a = [2, 0, 3, 1, 0, 4]\ns = 1\nr = []\nfor x in a:\n    y = ((s := s+x) % 3 and (s := s*2)) or (s := s-1)\n    r.append((s, y))\nprint(r)\nprint(s)",
+    "gold": "[(2, 2), (4, 4), (14, 14), (14, 14), (28, 28), (64, 64)]\n64",
+    "styles": [
+      "trace",
+      "segments",
+      "branches",
+      "dependencies",
+      "dependencies",
+      "trace",
+      "branches",
+      "segments",
+      "dependencies",
+      "segments"
+    ],
+    "reviews": [
+      "pitfalls",
+      "recompute",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q18",
+    "topic": "排序键的求值时刻",
+    "program": "a = [4, 1, 3, 2]\nlog = []\ndef key(x):\n    log.append(x)\n    return (x+len(log)) % 3\nb = sorted(a, key=key)\nc = sorted(b, key=lambda x: (x % 2, -x))\nprint(b, c)\nprint(log)",
+    "gold": "[1, 3, 2, 4] [4, 2, 3, 1]\n[4, 1, 3, 2]",
+    "styles": [
+      "trace",
+      "dependencies",
+      "branches",
+      "segments",
+      "branches",
+      "dependencies",
+      "segments",
+      "trace",
+      "segments",
+      "branches"
+    ],
+    "reviews": [
+      "pitfalls",
+      "ledger",
+      "recompute"
+    ]
+  },
+  {
+    "id": "Q19",
+    "topic": "双向状态变换",
+    "program": "a, b, c = 2, 3, 5\nr = []\nfor k in range(1, 9):\n    a, b = (a+b+k) % 11, (a*2-c) % 11\n    if b < a:\n        c = (c+b-k) % 13\n    else:\n        a, c = c % 11, (a+c) % 13\n    r.append((a, b, c))\nprint(r)",
+    "gold": "[(5, 10, 11), (0, 10, 4), (4, 7, 6), (4, 2, 4), (4, 4, 4), (4, 4, 7), (4, 1, 1), (1, 7, 3)]",
+    "styles": [
+      "segments",
+      "dependencies",
+      "trace",
+      "branches",
+      "trace",
+      "segments",
+      "dependencies",
+      "branches",
+      "segments",
+      "trace"
+    ],
+    "reviews": [
+      "recompute",
+      "pitfalls",
+      "ledger"
+    ]
+  },
+  {
+    "id": "Q20",
+    "topic": "异常控制流",
+    "program": "r = []\nfor n in range(5):\n    try:\n        r.append(10 // (n-2))\n        if n % 2:\n            continue\n        r.append(n)\n    except ZeroDivisionError:\n        r.append(7)\n    else:\n        r.append(8)\n    finally:\n        r.append(-n)\nprint(r)",
+    "gold": "[-5, 0, 8, 0, -10, -1, 7, -2, 10, -3, 5, 4, 8, -4]",
+    "styles": [
+      "branches",
+      "segments",
+      "dependencies",
+      "trace",
+      "dependencies",
+      "segments",
+      "trace",
+      "branches",
+      "segments",
+      "branches"
+    ],
+    "reviews": [
+      "pitfalls",
+      "recompute",
+      "ledger"
+    ]
+  }
+]

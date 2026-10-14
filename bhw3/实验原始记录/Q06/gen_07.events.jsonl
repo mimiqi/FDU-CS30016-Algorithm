@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a88-c8dc-7940-80f5-9ba497199e78"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"17 5 12\\n29 6 2\",\"reason\":\"递归过程中偶数项会使前一项缓存加1；先计算并记录缓存变动，再按缓存值求各次调用。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12322,"cached_input_tokens":6912,"cache_write_input_tokens":0,"output_tokens":250,"reasoning_output_tokens":195}}

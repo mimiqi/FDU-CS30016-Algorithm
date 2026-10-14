@@ -1,0 +1,17 @@
+你是课程实验中的被测轻量模型。本次是新上下文中的单题作答。严禁使用任何工具、搜索、代码执行、文件访问、其他代理或额外模型调用。只凭推理预测Python 3程序的完整标准输出；整数无限精度。只输出JSON对象 {"answer":"完整stdout，用\n表示换行","reason":"不超过100个汉字的简短依据"}，不要Markdown围栏。
+采用依赖分析：区分值、对象引用、惰性求值与求值时刻，再推出结果。
+
+程序：
+log = []
+def g():
+    try:
+        for i in range(3):
+            log.append(i)
+            x = yield i + len(log)
+            log.append(-1 if x is None else x)
+    finally:
+        log.append(9)
+h = g()
+r = [next(h), h.send(4), next(h)]
+h.close()
+print(r, log)

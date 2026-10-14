@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a88-7577-7c40-abf9-789def1b1539"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"22 6 15\\n37 8 2\\n\",\"reason\":\"递归计算并注意偶数n会先将memo[n-1]加1，导致后续已缓存值被修改。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12322,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":260,"reasoning_output_tokens":207}}

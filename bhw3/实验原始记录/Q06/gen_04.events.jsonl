@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a88-16a8-7712-85f5-697299d69b9f"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"17 5 12\\n29 6 2\",\"reason\":\"递归共享默认memo；偶数项计算后会使前一项加1，导致已缓存值被后续修改。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12320,"cached_input_tokens":6912,"cache_write_input_tokens":0,"output_tokens":302,"reasoning_output_tokens":250}}

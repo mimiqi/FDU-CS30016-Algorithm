@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8c-3fff-7f03-83f0-ea7369383fb4"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"[1, 4, 7] [0, 4, 1, -1, 2, 9]\",\"reason\":\"依次挂起时产出1、4、7；send(4)记录4，next记录-1，close触发finally记录9。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12302,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":178,"reasoning_output_tokens":106}}

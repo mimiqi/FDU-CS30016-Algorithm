@@ -1,0 +1,54 @@
+{
+  "question": "Q10",
+  "kind": "gen",
+  "index": 0,
+  "style": "trace",
+  "requested_model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "context": "fresh-ephemeral",
+  "started_at": "2026-10-14T13:13:13.707696+00:00",
+  "elapsed_seconds": 10.281,
+  "command": [
+    "C:\\Users\\mimiqi\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-5.6-luna",
+    "--config",
+    "model_reasoning_effort=\"low\"",
+    "--config",
+    "web_search=\"disabled\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "multi_agent",
+    "--disable",
+    "apps",
+    "--json",
+    "-"
+  ],
+  "prompt_sha256": "bd24de0aaaf7fc26e7be7069a01dec3cbce95b0c8eee2969b3b01dc80d401a85",
+  "raw": "{\"answer\":\"[1, 4, 7] [0, 4, 1, -1, 2, 9]\",\"reason\":\"生成器依次暂停于三次yield；send(4)记录4，next记录-1，close触发finally追加9。\"}",
+  "raw_sha256": "4a012bd48a467e5dcd472cb2344570e29c7b5e6337b3773472dc286c5b97937e",
+  "answer": "[1,4,7][0,4,1,-1,2,9]",
+  "returncode": 0,
+  "tool_events": [],
+  "completed_turns": 1,
+  "usage": [
+    {
+      "input_tokens": 12298,
+      "cached_input_tokens": 12032,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 169,
+      "reasoning_output_tokens": 100
+    }
+  ],
+  "thread_ids": [
+    "01a13a8b-a953-7413-8194-bda96b1ee0a8"
+  ]
+}

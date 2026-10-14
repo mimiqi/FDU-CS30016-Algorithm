@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8e-0fa0-7032-9c61-ffd7d03f3183"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21 18\\n21\",\"reason\":\"默认列表持续复用。f(5)递归返回7、11后得21；随后f(2)得18，最后f(0)得21。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12293,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":429,"reasoning_output_tokens":375}}

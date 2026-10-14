@@ -1,0 +1,54 @@
+{
+  "question": "Q01",
+  "kind": "gen",
+  "index": 1,
+  "style": "trace",
+  "requested_model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "context": "fresh-ephemeral",
+  "started_at": "2026-10-14T13:05:39.886438+00:00",
+  "elapsed_seconds": 12.5,
+  "command": [
+    "C:\\Users\\mimiqi\\AppData\\Local\\OpenAI\\Codex\\bin\\2e5e00daee91c61d\\codex.EXE",
+    "exec",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--model",
+    "gpt-5.6-luna",
+    "--config",
+    "model_reasoning_effort=\"low\"",
+    "--config",
+    "web_search=\"disabled\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "multi_agent",
+    "--disable",
+    "apps",
+    "--json",
+    "-"
+  ],
+  "prompt_sha256": "4490ecb872ccfefcc434a1617a9a8c6ebd242d807e346fd97f3d5c28c5bc939e",
+  "raw": "{\"answer\":\"[8, 3, 0, 2, 5] 10\",\"reason\":\"按 t=0 到 7 逐步计算 i、j、交换赋值及 s，最终数组为 [8,3,0,2,5]，s=10。\"}",
+  "raw_sha256": "20df4b57a023e2490db1d44f1172a57344f1eb2c88815d472147bb35834ee0fb",
+  "answer": "[8,3,0,2,5]10",
+  "returncode": 0,
+  "tool_events": [],
+  "completed_turns": 1,
+  "usage": [
+    {
+      "input_tokens": 12334,
+      "cached_input_tokens": 12032,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 669,
+      "reasoning_output_tokens": 599
+    }
+  ],
+  "thread_ids": [
+    "01a13a84-bc8d-7261-b8ec-09cd9453a238"
+  ]
+}

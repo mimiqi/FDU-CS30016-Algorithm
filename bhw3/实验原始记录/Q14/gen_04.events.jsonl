@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"01a13a8e-d6ca-72f3-9c05-88d90fca9416"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"{\"answer\":\"21 18\\n21\\n\",\"reason\":\"默认列表在递归和多次调用间共享；依次追加并按末三项求和，得到x=21、y=18，最后f(0)=21。\"}"}}
+{"type":"turn.completed","usage":{"input_tokens":12293,"cached_input_tokens":12032,"cache_write_input_tokens":0,"output_tokens":388,"reasoning_output_tokens":330}}
