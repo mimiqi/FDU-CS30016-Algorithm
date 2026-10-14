@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="504.5669291338583" height="145" preserveAspectRatio="xMinYMin meet" viewBox="0 0 504 145" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="504.5669291338583" height="145"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-145)" style="clip-path: url(#clip)">
+		<g transform="">
+			<path d="M 46,30 L 478.566929,30 Z" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 0.5;"/>
+			<text x="33.719091796875" y="27.0" style="font-family: CN; font-size: 7.3px;fill: rgb(36%,41%,45%); stroke:none;" transform="translate(0,54) scale(1,-1)">0</text>
+			<path d="M 46,52.75 L 478.566929,52.75 Z" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 0.5;"/>
+			<text x="29.43818359375" y="49.75" style="font-family: CN; font-size: 7.3px;fill: rgb(36%,41%,45%); stroke:none;" transform="translate(0,99) scale(1,-1)">25</text>
+			<path d="M 46,75.5 L 478.566929,75.5 Z" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 0.5;"/>
+			<text x="29.43818359375" y="72.5" style="font-family: CN; font-size: 7.3px;fill: rgb(36%,41%,45%); stroke:none;" transform="translate(0,145) scale(1,-1)">50</text>
+			<path d="M 46,98.25 L 478.566929,98.25 Z" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 0.5;"/>
+			<text x="29.43818359375" y="95.25" style="font-family: CN; font-size: 7.3px;fill: rgb(36%,41%,45%); stroke:none;" transform="translate(0,190) scale(1,-1)">75</text>
+			<path d="M 46,121 L 478.566929,121 Z" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 0.5;"/>
+			<text x="25.157275390625" y="118.0" style="font-family: CN; font-size: 7.3px;fill: rgb(36%,41%,45%); stroke:none;" transform="translate(0,236) scale(1,-1)">100</text>
+			<text x="3" y="131" style="font-family: CN; font-size: 8px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,262) scale(1,-1)">正确率（%）</text>
+			<circle cx="46.0" cy="75.5" r="3" style="stroke: rgb(8%,49%,55%); stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,49%,55%); fill-rule: evenodd;"/>
+			<text x="37.341796875" y="82.5" style="font-family: CNB; font-size: 8px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,165) scale(1,-1)">50%</text>
+			<text x="43.654296875" y="17" style="font-family: CN; font-size: 8px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,34) scale(1,-1)">1</text>
+			<path d="M 46,75.5 L 142.125984,89.15 Z" style="stroke: rgb(8%,49%,55%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<circle cx="142.12598425196853" cy="89.15" r="3" style="stroke: rgb(8%,49%,55%); stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,49%,55%); fill-rule: evenodd;"/>
+			<text x="133.46778112696853" y="96.15" style="font-family: CNB; font-size: 8px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,192) scale(1,-1)">65%</text>
+			<text x="139.78028112696853" y="17" style="font-family: CN; font-size: 8px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,34) scale(1,-1)">3</text>
+			<path d="M 142.125984,89.15 L 238.251969,102.8 Z" style="stroke: rgb(8%,49%,55%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<circle cx="238.25196850393704" cy="102.8" r="3" style="stroke: rgb(8%,49%,55%); stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,49%,55%); fill-rule: evenodd;"/>
+			<text x="229.59376537893704" y="109.8" style="font-family: CNB; font-size: 8px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,219) scale(1,-1)">80%</text>
+			<text x="235.90626537893704" y="17" style="font-family: CN; font-size: 8px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,34) scale(1,-1)">5</text>
+			<path d="M 238.251969,102.8 L 478.566929,102.8 Z" style="stroke: rgb(8%,49%,55%); stroke-linecap: butt; stroke-width: 1.8;"/>
+			<circle cx="478.5669291338583" cy="102.8" r="3" style="stroke: rgb(8%,49%,55%); stroke-linecap: butt; stroke-width: 1; fill: rgb(8%,49%,55%); fill-rule: evenodd;"/>
+			<text x="469.9087260088583" y="109.8" style="font-family: CNB; font-size: 8px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,219) scale(1,-1)">80%</text>
+			<text x="473.8755228838583" y="17" style="font-family: CN; font-size: 8px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,34) scale(1,-1)">10</text>
+			<text x="220.57448019192918" y="2" style="font-family: CN; font-size: 8px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,4) scale(1,-1)">生成采样次数（次/题）</text>
+		</g>
+	</g>
+</svg>

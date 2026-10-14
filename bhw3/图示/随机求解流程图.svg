@@ -2,13 +2,13 @@
 <!DOCTYPE svg
   PUBLIC '-//W3C//DTD SVG 1.0//EN'
   'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
-<svg width="504.5669291338583" height="190" preserveAspectRatio="xMinYMin meet" viewBox="0 0 504 190" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="504.5669291338583" height="180" preserveAspectRatio="xMinYMin meet" viewBox="0 0 504 180" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<title>...</title>
 	<desc>...</desc>
 	<clipPath id="clip">
-		<rect x="0" y="0" width="504.5669291338583" height="190"/>
+		<rect x="0" y="0" width="504.5669291338583" height="180"/>
 	</clipPath>
-	<g id="group" transform="scale(1,-1) translate(0,-190)" style="clip-path: url(#clip)">
+	<g id="group" transform="scale(1,-1) translate(0,-180)" style="clip-path: url(#clip)">
 		<g transform="">
 			<rect x="5" y="131" width="100" height="31" rx="3" ry="0" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,96%); fill-rule: evenodd;"/>
 			<text x="43.228515625" y="151" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,302) scale(1,-1)">原题 x</text>
@@ -20,16 +20,16 @@
 			<text x="352.33701171875" y="151" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,302) scale(1,-1)">随机盲复核1次</text>
 			<text x="363.2" y="140" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,280) scale(1,-1)">只见原题</text>
 			<rect x="145" y="76" width="125" height="31" rx="3" ry="0" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,96%); fill-rule: evenodd;"/>
-			<text x="182.3" y="96" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,192) scale(1,-1)">输出领先答案</text>
-			<text x="181.3197265625" y="85" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,170) scale(1,-1)">4次或7次停止</text>
+			<text x="178.1" y="96" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,192) scale(1,-1)">合并候选与复核</text>
+			<text x="165.5" y="85" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,170) scale(1,-1)">按票数及平票规则输出</text>
 			<rect x="325" y="76" width="110" height="31" rx="3" ry="0" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,96%); fill-rule: evenodd;"/>
-			<text x="354.8" y="96" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,192) scale(1,-1)">跨策略支持且</text>
-			<text x="342.2" y="85" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,170) scale(1,-1)">复核与领先者一致？</text>
+			<text x="354.0740234375" y="96" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,192) scale(1,-1)">已达到10次？</text>
 			<rect x="325" y="15" width="110" height="31" rx="3" ry="0" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,96%); fill-rule: evenodd;"/>
-			<text x="354.0740234375" y="35" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,70) scale(1,-1)">已达到10次？</text>
+			<text x="346.4" y="35" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,70) scale(1,-1)">唯一领先、足票数</text>
+			<text x="342.2" y="24" style="font-family: CN; font-size: 8.4px;fill: rgb(14%,20%,25%); stroke:none;" transform="translate(0,48) scale(1,-1)">跨策略且复核一致？</text>
 			<rect x="145" y="15" width="125" height="31" rx="3" ry="0" style="stroke: rgb(80%,84%,87%); stroke-linecap: butt; stroke-width: 1; fill: rgb(94%,96%,96%); fill-rule: evenodd;"/>
-			<text x="178.1" y="35" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,70) scale(1,-1)">合并候选与复核</text>
-			<text x="165.5" y="24" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,48) scale(1,-1)">按票数及平票规则输出</text>
+			<text x="182.3" y="35" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,70) scale(1,-1)">输出领先答案</text>
+			<text x="181.3197265625" y="24" style="font-family: CNB; font-size: 8.4px;fill: rgb(8%,49%,55%); stroke:none;" transform="translate(0,48) scale(1,-1)">4次或7次停止</text>
 			<path d="M 105,146 L 145,146 Z" style="stroke: rgb(36%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>
 			<polygon points="145 146, 140.6121 148.3971, 140.6121 143.6029" style="stroke: rgb(36%,41%,45%); stroke-linecap: butt; stroke-width: 1; fill: rgb(36%,41%,45%); fill-rule: evenodd;"/>
 			<path d="M 270,146 L 325,146 Z" style="stroke: rgb(36%,41%,45%); stroke-linecap: butt; stroke-width: 1;"/>

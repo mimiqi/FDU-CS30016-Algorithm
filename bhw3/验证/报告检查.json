@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "reviewed_on": "2026-10-14 Asia/Shanghai",
+  "pdf": "作业3.pdf",
+  "pages": 3,
+  "page_size": "A4",
+  "file_size_bytes": 274886,
+  "replacement_chars": 0,
+  "clipped_characters": 0,
+  "reflection_characters": 147,
+  "visual_review_pages": [
+    1,
+    2,
+    3
+  ],
+  "render_dpi": 135,
+  "required_content": "passed",
+  "markdown_contains_full_report": true,
+  "pdf_sha256": "afa6c40d26f45cf53f7e5379058cdc2679ba025599dfbd591a612120ef7812b5",
+  "experiment_source_sha256": "49c356af1942a92603e766d3002f2f59c28453158b3621ddbf908fac7dd18809",
+  "audit_source_sha256": "12127b92ab487d4f61a04e60ae489e6d667994bd31563550095dc4079ab4d97d",
+  "removed_requested_content": "passed",
+  "student_info_removed": "passed"
+}
