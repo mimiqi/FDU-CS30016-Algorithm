@@ -1,0 +1,3 @@
+# Preserve source, dataset and result bytes used by the reproducibility hashes.
+* -text
+*.pdf binary

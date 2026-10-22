@@ -1,0 +1,48 @@
+{
+  "pages": 4,
+  "page_sizes": [
+    [
+      595.2756,
+      841.8898
+    ],
+    [
+      595.2756,
+      841.8898
+    ],
+    [
+      595.2756,
+      841.8898
+    ],
+    [
+      595.2756,
+      841.8898
+    ]
+  ],
+  "page_text_chars": [
+    1065,
+    1428,
+    1241,
+    1537
+  ],
+  "reflection_chars": 199,
+  "pdf_sha256": "5b8d0d485fbe4c7cee5716f682fd4199cf6226e855eccfd1a7077819d1edcddd",
+  "experiment_sha256": "6f1174bb13e0adeae1b8d3e301f3ae99d2a1c53dc06e6ee982b9ccca8c026ae7",
+  "source_sha256": "9af05cdcee2b11c01d0f833448d946b449f8ca66b27c3d9ce1de8d00d16d86e0",
+  "text_checks": "passed",
+  "visual_review": {
+    "status": "passed",
+    "pages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "render_dpi": 115,
+    "checks": [
+      "Chinese and math glyphs",
+      "no clipping or overlap",
+      "tables and pseudocode readable",
+      "four A4 pages with consistent footers"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "queries_checked": 300,
+  "exact_queries_checked": 100,
+  "independent_bucket_union_queries": 15,
+  "float64_ground_truth": true,
+  "forced_digest_collision": true,
+  "minimum_cosine_distance_to_threshold": 1.9357516950035958e-05,
+  "summary_recalculated": {
+    "queries": 300,
+    "nonempty_truth": 273,
+    "empty_truth": 27,
+    "macro_recall": 0.9854757412867303,
+    "micro_recall": 0.9855840576637693,
+    "reuse_hit_rate_nonempty": 1.0,
+    "mean_candidates": 790.7333333333333,
+    "p95_candidates": 1340.25,
+    "candidate_ratio": 0.079049618447799,
+    "mean_truth": 15.723333333333333,
+    "mean_false_candidates": 775.2366666666667
+  },
+  "experiment_sha256": "6f1174bb13e0adeae1b8d3e301f3ae99d2a1c53dc06e6ee982b9ccca8c026ae7",
+  "audit_source_sha256": "7a9ef0d2d9917c44e534f063cc93db96aad38a266ec268923d40e309827e9c6a"
+}

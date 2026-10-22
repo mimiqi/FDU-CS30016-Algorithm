@@ -1,0 +1,5 @@
+.deps/
+.cache/
+__pycache__/
+验证/__pycache__/
+tmp/
