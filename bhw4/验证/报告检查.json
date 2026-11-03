@@ -19,15 +19,21 @@
     ]
   ],
   "page_text_chars": [
-    1065,
-    1428,
-    1241,
-    1537
+    779,
+    1346,
+    1170,
+    1432
   ],
+  "tables": 6,
   "reflection_chars": 199,
-  "pdf_sha256": "5b8d0d485fbe4c7cee5716f682fd4199cf6226e855eccfd1a7077819d1edcddd",
-  "experiment_sha256": "6f1174bb13e0adeae1b8d3e301f3ae99d2a1c53dc06e6ee982b9ccca8c026ae7",
-  "source_sha256": "9af05cdcee2b11c01d0f833448d946b449f8ca66b27c3d9ce1de8d00d16d86e0",
+  "pdf_sha256": "78c1314a87064d5d5ab8a7fceaa64e3d371b58b2dc9d3fdaffd16f71226229ce",
+  "source_markdown": "D:\\text\\05_算法设计与分析\\bhw4\\大作业4_报告正文.md",
+  "source_markdown_sha256": "7d42b89712e35e02c768c9f625efb95b0e1a6900e6fea4768be6812a9546e827",
+  "renderer": "D:\\text\\05_算法设计与分析\\bhw4\\验证\\markdown_to_pdf.py",
+  "renderer_sha256": "59b43795438621570822e254b11df455d618edaa9a8fa41f18200e92b47af34f",
+  "source_markdown_unchanged": true,
+  "source_blocks_checked": 160,
+  "formula_typography": "Restored superscript k/L in known probability and memory formulas",
   "text_checks": "passed",
   "visual_review": {
     "status": "passed",
@@ -37,12 +43,12 @@
       3,
       4
     ],
-    "render_dpi": 115,
+    "render_dpi": 120,
     "checks": [
-      "Chinese and math glyphs",
-      "no clipping or overlap",
-      "tables and pseudocode readable",
-      "four A4 pages with consistent footers"
+      "student identity preserved",
+      "math superscripts and subscripts readable",
+      "all six tables and pseudocode fit",
+      "no clipping, overlap or missing glyphs"
     ]
   }
 }
